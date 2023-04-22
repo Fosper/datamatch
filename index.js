@@ -1,3 +1,5 @@
+'use strict'
+
 import isNull from './lib/types/isNull'
 import isNumber from './lib/types/isNumber'
 import isString from './lib/types/isString'
@@ -16,39 +18,40 @@ export default class {
         this.errors = []
         this.currentPath = ``
     }
-  
+
     field(fieldName) {
-        if (this.currentPath === ``) {
-            this.currentPath = fieldName
-        } else {
-            this.currentPath = `${this.currentPath}.${fieldName}`
-        }
-    
-        this.fields.push({
-            path: this.currentPath,
-            rules: []
-        })
-    
+        this.currentPath = this.currentPath === `` ? fieldName : `${this.currentPath}.${fieldName}`
+        this.fields.push({ path: this.currentPath, rules: [] })
         return this
     }
 
     end() {
-        const parentName = this.fields.at(-1).path.split(`.`).slice(0, -1).join(`.`)
+        const splitPath = this.fields.at(-1).path.split(`.`)
+        splitPath.pop()
+        const parentName = splitPath.join(`.`)
         const parentIndex = this.fields.findIndex(element => element.path === parentName)
-        if (parentIndex === -1) return this
-        const parentElement = this.fields.splice(parentIndex, 1)[0]
-        this.fields.push(parentElement)
+        if (parentIndex !== -1) {
+            const parentElement = this.fields.splice(parentIndex, 1)[0]
+            this.fields.push(parentElement)
+        }
         return this
     }
 
-    isNull(opt = {}) { this.fields.at(-1).rules.push([`Null`, opt]); return this.resetCurrentPath() }
-    isNumber(opt = {}) { this.fields.at(-1).rules.push([`Number`, opt]); return this.resetCurrentPath() }
-    isString(opt = {}) { this.fields.at(-1).rules.push([`String`, opt]); return this.resetCurrentPath() }
-  
+    isNull(opt = {}) { this.addRule(`Null`, opt); return this.resetCurrentPath() }
+    isNumber(opt = {}) { this.addRule(`Number`, opt); return this.resetCurrentPath() }
+    isString(opt = {}) { this.addRule(`String`, opt); return this.resetCurrentPath() }
+
+    addRule(ruleName, opt) {
+        this.fields.at(-1).rules.push([ruleName, opt])
+    }
+
     check(obj) {
         let result = { data: true, errors: null }
         for (const field of this.fields) this.validateField(field, obj)
-        if (this.errors.length) { result.data = false; result.errors = [ ...this.errors ] }
+        if (this.errors.length) {
+            result.data = false
+            result.errors = [...this.errors]
+        }
         return result
     }
 
@@ -62,7 +65,7 @@ export default class {
         this.currentPath = ``
         return this
     }
-  
+
     validateField(field, obj) {
         const fieldValue = this.getValueByPath(obj, field.path)
         const allErrors = []
@@ -71,20 +74,23 @@ export default class {
         for (const [ruleName, fieldOptions] of field.rules) {
             let errors = this.checkType(ruleName, fieldValue, fieldOptions, field.path)
             if (errors.length) {
-                if (Array.isArray(errors)) { allErrors.push(...errors); continue }
+                if (Array.isArray(errors)) {
+                    allErrors.push(...errors)
+                    continue
+                }
                 allErrors.push(errors)
             } else {
                 noErrors = true
             }
         }
-      
+
         if (!noErrors && allErrors.length > 0) this.errors.push(...allErrors)
     }
-  
+
     getValueByPath(obj, path) {
         return path.split(`.`).reduce((o, key) => (o && o[key] !== `undefined` ? o[key] : undefined), obj)
     }
-  
+
     checkType(ruleName, fieldValue, fieldOptions, fieldPath) {
         return this.constructor[`is${ruleName}`](fieldValue, fieldOptions, true, fieldPath)
     }
