@@ -1,0 +1,31 @@
+{
+  "name": "datamatch",
+  "version": "1.0.0",
+  "description": "Simple and faster tool to check any input data. Without any dependencies.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "NODE_ENV=test node --experimental-specifier-resolution=node test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fosper/datamatch.git"
+  },
+  "keywords": [
+    "validation",
+    "validator",
+    "datamatch",
+    "match",
+    "check"
+  ],
+  "author": {
+    "name": "Fosper",
+    "email": "fosper@icloud.com",
+    "url": "https://www.npmjs.com/~fosper"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/fosper/datamatch/issues"
+  },
+  "homepage": "https://github.com/fosper/datamatch#readme"
+}
