@@ -1,6 +1,6 @@
 {
   "name": "datamatch",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple and faster tool to check any input data. Without any dependencies.",
   "main": "index.js",
   "type": "module",
