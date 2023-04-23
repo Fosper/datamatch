@@ -1,6 +1,7 @@
 'use strict'
 
 import types from './lib/types'
+import isFloat from './lib/types/isFloat'
 import isInteger from './lib/types/isInteger'
 import isNumeric from './lib/types/isNumeric'
 
@@ -36,6 +37,7 @@ export default class {
     static isSharedArrayBuffer = (...opt) => types.default(`SharedArrayBuffer`, opt)
 
     // Custom static types:
+    static isFloat = isFloat
     static isInteger = isInteger
     static isNumeric = isNumeric
 
@@ -151,6 +153,7 @@ export default class {
     isSharedArrayBuffer = (opt = {}) => { this.addRule(`SharedArrayBuffer`, opt); return this.resetCurrentPath() }
 
     // Custom types:
+    isFloat = (opt = {}) => { this.addRule(`Float`, opt); return this.resetCurrentPath() }
     isInteger = (opt = {}) => { this.addRule(`Integer`, opt); return this.resetCurrentPath() }
     isNumeric = (opt = {}) => { this.addRule(`Numeric`, opt); return this.resetCurrentPath() }
 }
