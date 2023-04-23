@@ -12,11 +12,18 @@
     "url": "git+https://github.com/fosper/datamatch.git"
   },
   "keywords": [
-    "validation",
-    "validator",
     "datamatch",
+    "data",
     "match",
-    "check"
+    "matching",
+    "check",
+    "checking",
+    "valid",
+    "validate",
+    "validator",
+    "validation",
+    "verification",
+    "compliance"
   ],
   "author": {
     "name": "Fosper",

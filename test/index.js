@@ -6,12 +6,12 @@ import datamatch from './../index'
 
 let func1 = (penCount) => {
     let result = true
-    if (!datamatch.isNumber(penCount, { min: 5 })) result = false
+    if (!datamatch.isNumeric(penCount)) result = false
     console.log(result)
     return result
 }
 
-let penCount = 5 // Replace '5' to '4' for understanding how it works.
+let penCount = 0 // Replace '5' to '4' for understanding how it works.
 
 func1(penCount)
 
