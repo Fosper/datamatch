@@ -120,7 +120,7 @@ export default class {
         return this.constructor[`is${ruleName}`](fieldValue, fieldOptions, true, fieldPath)
     }
 
-    // Default static types:
+    // Default types:
     isUndefined = (opt = {}) => { this.addRule(`Undefined`, opt); return this.resetCurrentPath() }
     isNull = (opt = {}) => { this.addRule(`Null`, opt); return this.resetCurrentPath() }
     isBoolean = (opt = {}) => { this.addRule(`Boolean`, opt); return this.resetCurrentPath() }
