@@ -57,7 +57,7 @@ Install Datamatch using npm:
 npm install --save datamatch
 ```
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 # Import
 
@@ -69,7 +69,7 @@ OR
 const datamatch = require('datamatch');
 ```
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 # Usage
 
@@ -85,7 +85,7 @@ Returns:
 true
 ```
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 ## Example 2: Array validation
 
@@ -99,7 +99,7 @@ Returns:
 true
 ```
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 ## Example 3: Nested field validation
 
@@ -131,7 +131,7 @@ Returns:
 true
 ```
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 # Default NodeJS types
 
@@ -148,7 +148,7 @@ Available options: todo.
 Available options:  
 [min](#min)
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 ## isBigInt
 Available options: todo.
@@ -157,7 +157,7 @@ Available options: todo.
 Available options:  
 [minLength](#minlength)
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 ## isArray
 Available options: todo.
@@ -236,7 +236,7 @@ Available options: todo.
 ## isNumeric
 Available options: todo.
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 # Options
 
@@ -245,16 +245,16 @@ Value types:
 Number - For Number comparison  
 String - For BigInt comparison (todo)
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 ## minLength
 Value types:  
 Number
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
 
 # License
 
 Datamatch is released under the [MIT License](https://github.com/fosper/datamatch/blob/main/LICENSE).
 
-[back to top](#datamatch)
+[back to top](#table-of-contents)
