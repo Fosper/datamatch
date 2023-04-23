@@ -54,7 +54,7 @@ Important: Data types and check options are updated every week. Contact issues t
 Install Datamatch using npm:
 
 ```bash
-npm install --save datamatch
+npm i datamatch
 ```
 
 [back to top](#table-of-contents)
