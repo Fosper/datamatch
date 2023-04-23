@@ -138,11 +138,17 @@ true
 ## isUndefined
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isNull
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isBoolean
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isNumber
 Available options:  
@@ -153,6 +159,8 @@ Available options:
 ## isBigInt
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isString
 Available options:  
 [minLength](#minlength)
@@ -162,76 +170,124 @@ Available options:
 ## isArray
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isObject
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isFunction
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isAsyncFunction
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isPromise
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isSymbol
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isArrayBuffer
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isSet
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isMap
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isDate
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isRegExp
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isDataView
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isInt8Array
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isInt16Array
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isInt32Array
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isUint8Array
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isUint16Array
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isUint32Array
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isFloat32Array
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isFloat64Array
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isUint8ClampedArray
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isSharedArrayBuffer
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 # Custom library types
 
 ## isFloat
 Available options: todo.
 
+[back to top](#table-of-contents)
+
 ## isInteger
 Available options: todo.
+
+[back to top](#table-of-contents)
 
 ## isNumeric
 Available options: todo.
