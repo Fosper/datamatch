@@ -5,7 +5,7 @@ import datamatch from './../index'
  */
 
 let penCount = 5 // Replace '5' to 'null' to get 'false'.
-datamatch.isNumber(penCount) ? console.log(true) : console.log(false)
+datamatch.isNumber(penCount, { min: 5 }) ? console.log(true) : console.log(false)
 
 /**
  * Example-2 for 'npm run test':

@@ -77,7 +77,7 @@ const datamatch = require('datamatch');
 
 ```js
 let penCount = 5
-datamatch.isNumber(penCount) ? console.log(true) : console.log(false)
+datamatch.isNumber(penCount, { min: 5 }) ? console.log(true) : console.log(false)
 ```
 
 Returns:
