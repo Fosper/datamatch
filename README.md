@@ -57,6 +57,8 @@ Install Datamatch using npm:
 npm install --save datamatch
 ```
 
+[back to top](#datamatch)
+
 # Import
 
 ```js
@@ -66,6 +68,8 @@ OR
 ```js
 const datamatch = require('datamatch');
 ```
+
+[back to top](#datamatch)
 
 # Usage
 
@@ -81,6 +85,8 @@ Returns:
 true
 ```
 
+[back to top](#datamatch)
+
 ## Example 2: Array validation
 
 ```js
@@ -92,6 +98,8 @@ Returns:
 ```js
 true
 ```
+
+[back to top](#datamatch)
 
 ## Example 3: Nested field validation
 
@@ -123,6 +131,8 @@ Returns:
 true
 ```
 
+[back to top](#datamatch)
+
 # Default NodeJS types
 
 ## isUndefined
@@ -138,12 +148,16 @@ Available options: todo.
 Available options:  
 [min](#min)
 
+[back to top](#datamatch)
+
 ## isBigInt
 Available options: todo.
 
 ## isString
 Available options:  
 [minLength](#minlength)
+
+[back to top](#datamatch)
 
 ## isArray
 Available options: todo.
@@ -222,6 +236,8 @@ Available options: todo.
 ## isNumeric
 Available options: todo.
 
+[back to top](#datamatch)
+
 # Options
 
 ## min
@@ -229,10 +245,16 @@ Value types:
 Number - For Number comparison  
 String - For BigInt comparison (todo)
 
+[back to top](#datamatch)
+
 ## minLength
 Value types:  
 Number
 
+[back to top](#datamatch)
+
 # License
 
 Datamatch is released under the [MIT License](https://github.com/fosper/datamatch/blob/main/LICENSE).
+
+[back to top](#datamatch)
