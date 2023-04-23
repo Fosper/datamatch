@@ -135,14 +135,14 @@ Available options: todo.
 Available options: todo.
 
 ## isNumber
-Available options:
+Available options:  
 [min](#min)
 
 ## isBigInt
 Available options: todo.
 
 ## isString
-Available options:
+Available options:  
 [minLength](#minlength)
 
 ## isArray
@@ -225,12 +225,12 @@ Available options: todo.
 # Options
 
 ## min
-Value types:
-Number - For Number comparison
+Value types:  
+Number - For Number comparison  
 String - For BigInt comparison (todo)
 
 ## minLength
-Value types:
+Value types:  
 Number
 
 # License
