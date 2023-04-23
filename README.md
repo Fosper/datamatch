@@ -90,7 +90,7 @@ true
 ## Example 2: Array validation
 
 ```js
-let firends = [ `John`, `Katrin`, `Tom` ]
+let firends = [ 'John', 'Katrin', 'Tom' ]
 datamatch.isArray(firends) ? console.log(true) : console.log(false)
 ```
 
@@ -107,15 +107,15 @@ true
 let obj = {
     one: null,
     two: 55,
-    three: { four: `Hello` },
-    five: { six: [ `John`, `Katrin` ] }
+    three: { four: 'Hello' },
+    five: { six: [ 'John', 'Katrin' ] }
 }
 
 const dm = datamatch.init()
-    .field(`one`).isNull()
-    .field(`two`).isNumber({ min: 55 })
-    .field(`three`).field(`four`).isString({ minLength: 5 }).end()
-    .field(`five`).field(`six`).isArray()
+    .field('one').isNull()
+    .field('two').isNumber({ min: 55 })
+    .field('three').field('four').isString({ minLength: 5 }).end()
+    .field('five').field('six').isArray()
     .check(obj)
 
 if (dm.errors) {
