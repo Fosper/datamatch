@@ -1,6 +1,8 @@
 # Datamatch - Simple and Fast Data Validation for Node.js
 Datamatch is a user-friendly and easy-to-use JavaScript library for data validation without any dependencies. It allows you to validate input values against specific criteria and returns the validation result. This library is designed for use in Node.js projects and is perfect for developers who need a fast and reliable way to validate data.
 
+Important: Data types and check options are updated every week. Contact issues to add custom data types and options.
+
 ## Table of Contents
 
 - [Installation](#installation)
@@ -10,44 +12,44 @@ Datamatch is a user-friendly and easy-to-use JavaScript library for data validat
     - [Example 2: Array validation](#example-2-array-validation)
     - [Example 3: Nested field validation](#example-3-nested-field-validation)
 - [Default NodeJS types](#default-nodejs-types)
-    - [isUndefined](#datamatchisundefined)
-    - [isNull](#datamatchisnull)
-    - [isBoolean](#datamatchisboolean)
-    - [isNumber](#datamatchisnumber)
-    - [isBigInt](#datamatchisbigint)
-    - [isString](#datamatchisstring)
-    - [isArray](#datamatchisarray)
-    - [isObject](#datamatchisobject)
-    - [isFunction](#datamatchisfunction)
-    - [isAsyncFunction](#datamatchisasyncfunction)
-    - [isPromise](#datamatchispromise)
-    - [isSymbol](#datamatchissymbol)
-    - [isArrayBuffer](#datamatchisarraybuffer)
-    - [isSet](#datamatchisset)
-    - [isMap](#datamatchismap)
-    - [isDate](#datamatchisdate)
-    - [isRegExp](#datamatchisregexp)
-    - [isDataView](#datamatchisdataview)
-    - [isInt8Array](#datamatchisint8array)
-    - [isInt16Array](#datamatchisint16array)
-    - [isInt32Array](#datamatchisint32array)
-    - [isUint8Array](#datamatchisuint8array)
-    - [isUint16Array](#datamatchisuint16array)
-    - [isUint32Array](#datamatchisuint32array)
-    - [isFloat32Array](#datamatchisfloat32array)
-    - [isFloat64Array](#datamatchisfloat64array)
-    - [isUint8ClampedArray](#datamatchisuint8clampedarray)
-    - [isSharedArrayBuffer](#datamatchissharedarraybuffer)
+    - [isUndefined](#isundefined)
+    - [isNull](#isnull)
+    - [isBoolean](#isboolean)
+    - [isNumber](#isnumber)
+    - [isBigInt](#isbigint)
+    - [isString](#isstring)
+    - [isArray](#isarray)
+    - [isObject](#isobject)
+    - [isFunction](#isfunction)
+    - [isAsyncFunction](#isasyncfunction)
+    - [isPromise](#ispromise)
+    - [isSymbol](#issymbol)
+    - [isArrayBuffer](#isarraybuffer)
+    - [isSet](#isset)
+    - [isMap](#ismap)
+    - [isDate](#isdate)
+    - [isRegExp](#isregexp)
+    - [isDataView](#isdataview)
+    - [isInt8Array](#isint8array)
+    - [isInt16Array](#isint16array)
+    - [isInt32Array](#isint32array)
+    - [isUint8Array](#isuint8array)
+    - [isUint16Array](#isuint16array)
+    - [isUint32Array](#isuint32array)
+    - [isFloat32Array](#isfloat32array)
+    - [isFloat64Array](#isfloat64array)
+    - [isUint8ClampedArray](#isuint8clampedarray)
+    - [isSharedArrayBuffer](#issharedarraybuffer)
 - [Custom library types](#custom-library-types)
-    - [isFloat](#datamatchisfloat)
-    - [isInteger](#datamatchisinteger)
-    - [isNumeric](#datamatchisnumeric)
+    - [isFloat](#isfloat)
+    - [isInteger](#isinteger)
+    - [isNumeric](#isnumeric)
 - [Options](#options)
-    - [min](#datamatchmin)
-    - [minLength](#datamatchminlength)
+    - [min](#min)
+    - [minLength](#minlength)
 - [License](#license)
 
-## Installation
+# Installation
 
 Install Datamatch using npm:
 
@@ -55,7 +57,7 @@ Install Datamatch using npm:
 npm install --save datamatch
 ```
 
-## Import
+# Import
 
 ```js
 import datamatch from 'datamatch';
@@ -79,7 +81,6 @@ Returns:
 true
 ```
 
-
 ## Example 2: Array validation
 
 ```js
@@ -91,7 +92,6 @@ Returns:
 ```js
 true
 ```
-
 
 ## Example 3: Nested field validation
 
@@ -123,6 +123,116 @@ Returns:
 true
 ```
 
-## License
+# Default NodeJS types
+
+## isUndefined
+Available options: todo.
+
+## isNull
+Available options: todo.
+
+## isBoolean
+Available options: todo.
+
+## isNumber
+Available options:
+[min](#min)
+
+## isBigInt
+Available options: todo.
+
+## isString
+Available options:
+[minLength](#minlength)
+
+## isArray
+Available options: todo.
+
+## isObject
+Available options: todo.
+
+## isFunction
+Available options: todo.
+
+## isAsyncFunction
+Available options: todo.
+
+## isPromise
+Available options: todo.
+
+## isSymbol
+Available options: todo.
+
+## isArrayBuffer
+Available options: todo.
+
+## isSet
+Available options: todo.
+
+## isMap
+Available options: todo.
+
+## isDate
+Available options: todo.
+
+## isRegExp
+Available options: todo.
+
+## isDataView
+Available options: todo.
+
+## isInt8Array
+Available options: todo.
+
+## isInt16Array
+Available options: todo.
+
+## isInt32Array
+Available options: todo.
+
+## isUint8Array
+Available options: todo.
+
+## isUint16Array
+Available options: todo.
+
+## isUint32Array
+Available options: todo.
+
+## isFloat32Array
+Available options: todo.
+
+## isFloat64Array
+Available options: todo.
+
+## isUint8ClampedArray
+Available options: todo.
+
+## isSharedArrayBuffer
+Available options: todo.
+
+# Custom library types
+
+## isFloat
+Available options: todo.
+
+## isInteger
+Available options: todo.
+
+## isNumeric
+Available options: todo.
+
+# Options
+
+## min
+Value types:
+Number - For Number comparison
+String - For BigInt comparison (todo)
+
+## minLength
+Value types:
+Number
+
+# License
 
 Datamatch is released under the [MIT License](https://github.com/fosper/datamatch/blob/main/LICENSE).
