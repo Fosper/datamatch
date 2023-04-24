@@ -1,7 +1,7 @@
 # Datamatch - Simple and Fast Data Validation for Node.js
 Datamatch is a user-friendly and easy-to-use JavaScript library for data validation without any dependencies. It allows you to validate input values against specific criteria and returns the validation result. This library is designed for use in Node.js projects and is perfect for developers who need a fast and reliable way to validate data.
 
-Important: Data types and check options are updated every week. Contact issues to add custom data types and options.
+IMPORTANT: Data types and check options are updated every week. Contact issues to add custom data types and options.
 
 ## Table of Contents
 
