@@ -165,14 +165,14 @@ Available options: todo.
 
 ## isNumber
 Available options:  
-[min](#min)
-[max](#max)
-[minLength](#minlength)
-[maxLength](#maxlength)
-[values](#values)
-[isFloat](#isfloat)
-[isInt](#isint)
-[isNumeric](#isnumeric)
+[min](#min)  
+[max](#max)  
+[minLength](#minlength)  
+[maxLength](#maxlength)  
+[values](#values)  
+[isFloat](#isfloat)  
+[isInt](#isint)  
+[isNumeric](#isnumeric)  
 
 [back to top](#table-of-contents)
 
