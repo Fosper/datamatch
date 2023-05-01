@@ -178,40 +178,40 @@ Available options:
 
 ## isBigInt
 Available options:
-[min](#min)
-[max](#max)
-[minLength](#minlength)
-[maxLength](#maxlength)
-[values](#values)
-[isInt](#isint)
-[isNumeric](#isnumeric)
+[min](#min)  
+[max](#max)  
+[minLength](#minlength)  
+[maxLength](#maxlength)  
+[values](#values)  
+[isInt](#isint)  
+[isNumeric](#isnumeric)  
 
 [back to top](#table-of-contents)
 
 ## isString
 Available options:  
-[minLength](#minlength)
-[maxLength](#maxlength)
-[values](#values)
-[isDomain](#isdomain)
-[isUrl](#isurl)
-[isHTTPUrl](#ishttpUrl)
-[isHTTPSUrl](#ishttpsUrl)
-[isWSUrl](#iswsUrl)
-[isWSSUrl](#iswssUrl)
-[isIP](#isip)
-[isIPv4](#isipv4)
-[isIPv6](#isipv6)
-[isFloat](#isfloat)
-[isInt](#isint)
-[isNumeric](#isnumeric)
+[minLength](#minlength)  
+[maxLength](#maxlength)  
+[values](#values)  
+[isDomain](#isdomain)  
+[isUrl](#isurl)  
+[isHTTPUrl](#ishttpUrl)  
+[isHTTPSUrl](#ishttpsUrl)  
+[isWSUrl](#iswsUrl)  
+[isWSSUrl](#iswssUrl)  
+[isIP](#isip)  
+[isIPv4](#isipv4)  
+[isIPv6](#isipv6)  
+[isFloat](#isfloat)  
+[isInt](#isint)  
+[isNumeric](#isnumeric)  
 
 [back to top](#table-of-contents)
 
 ## isArray
 Available options:
-[minLength](#minlength)
-[maxLength](#maxlength)
+[minLength](#minlength)  
+[maxLength](#maxlength)  
 
 [back to top](#table-of-contents)
 
