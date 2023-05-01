@@ -177,7 +177,7 @@ Available options:
 [back to top](#table-of-contents)
 
 ## isBigInt
-Available options:
+Available options:  
 [min](#min)  
 [max](#max)  
 [minLength](#minlength)  
@@ -209,7 +209,7 @@ Available options:
 [back to top](#table-of-contents)
 
 ## isArray
-Available options:
+Available options:  
 [minLength](#minlength)  
 [maxLength](#maxlength)  
 
