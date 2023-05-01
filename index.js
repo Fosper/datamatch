@@ -1,9 +1,7 @@
 'use strict'
 
 import types from './lib/types'
-import isFloat from './lib/types/isFloat'
-import isInteger from './lib/types/isInteger'
-import isNumeric from './lib/types/isNumeric'
+import isExample from './lib/types/isExample'
 
 export default class {
     // Default static types:
@@ -37,9 +35,7 @@ export default class {
     static isSharedArrayBuffer = (...opt) => types.default(`SharedArrayBuffer`, opt)
 
     // Custom static types:
-    static isFloat = isFloat
-    static isInteger = isInteger
-    static isNumeric = isNumeric
+    static isExample = isExample
 
     static init = () => { return new this() }
 
@@ -72,7 +68,7 @@ export default class {
         for (const field of this.fields) this.validateField(field, obj)
         if (this.errors.length) {
             result.data = false
-            result.errors = [...this.errors]
+            result.errors = [ ...this.errors ]
         }
         return result
     }
@@ -153,7 +149,5 @@ export default class {
     isSharedArrayBuffer = (opt = {}) => { this.addRule(`SharedArrayBuffer`, opt); return this.resetCurrentPath() }
 
     // Custom types:
-    isFloat = (opt = {}) => { this.addRule(`Float`, opt); return this.resetCurrentPath() }
-    isInteger = (opt = {}) => { this.addRule(`Integer`, opt); return this.resetCurrentPath() }
-    isNumeric = (opt = {}) => { this.addRule(`Numeric`, opt); return this.resetCurrentPath() }
+    isExample = (opt = {}) => { this.addRule(`Example`, opt); return this.resetCurrentPath() }
 }

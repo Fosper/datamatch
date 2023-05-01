@@ -40,13 +40,26 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [isFloat64Array](#isfloat64array)
     - [isUint8ClampedArray](#isuint8clampedarray)
     - [isSharedArrayBuffer](#issharedarraybuffer)
-- [Custom library types](#custom-library-types)
-    - [isFloat](#isfloat)
-    - [isInteger](#isinteger)
-    - [isNumeric](#isnumeric)
+<!-- - [Custom library types](#custom-library-types)
+    - [isFloat](#isfloat) -->
 - [Options](#options)
     - [min](#min)
+    - [max](#max)
     - [minLength](#minlength)
+    - [maxLength](#maxlength)
+    - [values](#values)
+    - [isDomain](#isdomain)
+    - [isUrl](#isurl)
+    - [isHTTPUrl](#ishttpUrl)
+    - [isHTTPSUrl](#ishttpsUrl)
+    - [isWSUrl](#iswsUrl)
+    - [isWSSUrl](#iswssUrl)
+    - [isIP](#isip)
+    - [isIPv4](#isipv4)
+    - [isIPv6](#isipv6)
+    - [isFloat](#isfloat)
+    - [isInt](#isint)
+    - [isNumeric](#isnumeric)
 - [License](#license)
 
 # Installation
@@ -76,8 +89,8 @@ const datamatch = require('datamatch');
 ## Example 1: Number validation
 
 ```js
-let penCount = 5
-datamatch.isNumber(penCount, { min: 5 }) ? console.log(true) : console.log(false)
+const penCount = 5
+console.log(datamatch.isNumber(penCount, { min: 5 })) // true
 ```
 
 Returns:
@@ -90,8 +103,8 @@ true
 ## Example 2: Array validation
 
 ```js
-let firends = [ 'John', 'Katrin', 'Tom' ]
-datamatch.isArray(firends) ? console.log(true) : console.log(false)
+const firends = [ `John`, `Katrin`, `Tom` ]
+console.log(datamatch.isArray(firends)) // true
 ```
 
 Returns:
@@ -153,22 +166,52 @@ Available options: todo.
 ## isNumber
 Available options:  
 [min](#min)
+[max](#max)
+[minLength](#minlength)
+[maxLength](#maxlength)
+[values](#values)
+[isFloat](#isfloat)
+[isInt](#isint)
+[isNumeric](#isnumeric)
 
 [back to top](#table-of-contents)
 
 ## isBigInt
-Available options: todo.
+Available options:
+[min](#min)
+[max](#max)
+[minLength](#minlength)
+[maxLength](#maxlength)
+[values](#values)
+[isInt](#isint)
+[isNumeric](#isnumeric)
 
 [back to top](#table-of-contents)
 
 ## isString
 Available options:  
 [minLength](#minlength)
+[maxLength](#maxlength)
+[values](#values)
+[isDomain](#isdomain)
+[isUrl](#isurl)
+[isHTTPUrl](#ishttpUrl)
+[isHTTPSUrl](#ishttpsUrl)
+[isWSUrl](#iswsUrl)
+[isWSSUrl](#iswssUrl)
+[isIP](#isip)
+[isIPv4](#isipv4)
+[isIPv6](#isipv6)
+[isFloat](#isfloat)
+[isInt](#isint)
+[isNumeric](#isnumeric)
 
 [back to top](#table-of-contents)
 
 ## isArray
-Available options: todo.
+Available options:
+[minLength](#minlength)
+[maxLength](#maxlength)
 
 [back to top](#table-of-contents)
 
@@ -284,7 +327,7 @@ Available options: todo.
 
 [back to top](#table-of-contents)
 
-## isInteger
+## isInt
 Available options: todo.
 
 [back to top](#table-of-contents)
@@ -297,15 +340,201 @@ Available options: todo.
 # Options
 
 ## min
-Value types:  
-Number - For Number comparison  
-String - For BigInt comparison (todo)
+```js
+console.log(datamatch.isNumber(5, { min: 5 })) // true
+console.log(datamatch.isNumber(5, { min: 6 })) // false
+
+const ants = BigInt('1000000000000000000000000000000')
+console.log(datamatch.isBigInt(big, { min: '1000000000000000000000000000000' })) // true
+console.log(datamatch.isBigInt(big, { min: '1000000000000000000000000000001' })) // false
+```
+
+[back to top](#table-of-contents)
+
+## max
+```js
+console.log(datamatch.isNumber(5, { max: 5 })) // true
+console.log(datamatch.isNumber(5, { max: 4 })) // false
+
+const atoms = BigInt('3200000000000000000000000000000')
+console.log(datamatch.isBigInt(bigCount, { max: '3200000000000000000000000000000' })) // true
+console.log(datamatch.isBigInt(bigCount, { max: '3199999999999999999999999999999' })) // false
+```
 
 [back to top](#table-of-contents)
 
 ## minLength
-Value types:  
-Number
+```js
+console.log(datamatch.isNumber(9, { minLength: 1 })) // true
+console.log(datamatch.isNumber(9, { minLength: 2 })) // false
+
+console.log(datamatch.isBigIng(BigInt('12345'), { minLength: 5 })) // true
+console.log(datamatch.isBigIng(BigInt('12345'), { minLength: 6 })) // false
+
+console.log(datamatch.isString('Hello', { minLength: 5 })) // true
+console.log(datamatch.isString('Hello', { minLength: 6 })) // false
+
+console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { minLength: 5 })) // true
+console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { minLength: 6 })) // false
+```
+
+[back to top](#table-of-contents)
+
+## maxLength
+```js
+console.log(datamatch.isNumber(9, { maxLength: 1 })) // true
+console.log(datamatch.isNumber(9, { maxLength: 0 })) // false
+
+console.log(datamatch.isBigIng(BigInt('12345'), { maxLength: 5 })) // true
+console.log(datamatch.isBigIng(BigInt('12345'), { maxLength: 4 })) // false
+
+console.log(datamatch.isString('Hello', { maxLength: 5 })) // true
+console.log(datamatch.isString('Hello', { maxLength: 4 })) // false
+
+console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { maxLength: 5 })) // true
+console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { maxLength: 4 })) // false
+```
+
+[back to top](#table-of-contents)
+
+## values
+```js
+console.log(datamatch.isNumber(77, { values: [ 53, 77, 99 ] })) // true
+console.log(datamatch.isNumber(77, { values: [ 53, 99 ] })) // false
+
+console.log(datamatch.isBigIng(BigInt('77'), { values: [ BigInt('77'), BigInt('99') ] })) // true
+console.log(datamatch.isBigIng(BigInt('77'), { values: [ BigInt('99') ] })) // false
+
+console.log(datamatch.isString('Hello', { values: [ 'Hello', 'Bye' ] })) // true
+console.log(datamatch.isString('Hello', { values: [ 'Bye' ] })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isDomain
+```js
+console.log(datamatch.isString('www.example.com', { isDomain: true })) // true
+console.log(datamatch.isString('example.com', { isDomain: true })) // true
+console.log(datamatch.isString('example@.com', { isDomain: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isUrl
+```js
+console.log(datamatch.isString('https://www.example.com', { isUrl: true })) // true
+console.log(datamatch.isString('https://example.com', { isUrl: true })) // true
+console.log(datamatch.isString('example.com', { isUrl: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isHTTPUrl
+```js
+console.log(datamatch.isString('http://www.example.com', { isHTTPUrl: true })) // true
+console.log(datamatch.isString('http://example.com', { isHTTPUrl: true })) // true
+console.log(datamatch.isString('https://example.com', { isHTTPUrl: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isHTTPSUrl
+```js
+console.log(datamatch.isString('https://www.example.com', { isHTTPUrl: true })) // true
+console.log(datamatch.isString('https://example.com', { isHTTPUrl: true })) // true
+console.log(datamatch.isString('http://example.com', { isHTTPUrl: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isWSUrl
+```js
+console.log(datamatch.isString('ws://www.example.com', { isHTTPUrl: true })) // true
+console.log(datamatch.isString('ws://example.com', { isHTTPUrl: true })) // true
+console.log(datamatch.isString('wss://example.com', { isHTTPUrl: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isWSSUrl
+```js
+console.log(datamatch.isString('wss://www.example.com', { isHTTPUrl: true })) // true
+console.log(datamatch.isString('wss://example.com', { isHTTPUrl: true })) // true
+console.log(datamatch.isString('ws://example.com', { isHTTPUrl: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isIP
+```js
+console.log(datamatch.isString('192.168.0.1', { isIP: true })) // true
+console.log(datamatch.isString('2001:0db8:85a3:0000:0000:8a2e:0370:7334', { isIP: true })) // true
+console.log(datamatch.isString('192.168.0.256', { isIP: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isIPv4
+```js
+console.log(datamatch.isString('192.168.0.1', { isIPv4: true })) // true
+console.log(datamatch.isString('2001:0db8:85a3:0000:0000:8a2e:0370:7334', { isIPv4: true })) // false
+console.log(datamatch.isString('192.168.0.256', { isIPv4: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isIPv6
+```js
+console.log(datamatch.isString('2001:0db8:85a3:0000:0000:8a2e:0370:7334', { isIPv6: true })) // true
+console.log(datamatch.isString('192.168.0.1', { isIPv6: true })) // false
+console.log(datamatch.isString('192.168.0.256', { isIPv6: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isFloat
+```js
+console.log(datamatch.isNumber(0.34, { isFloat: true })) // true
+console.log(datamatch.isNumber(2, { isFloat: true })) // false
+
+// If string value is float, you can safely use 'parseFloat(value)' without fear of errors.
+console.log(datamatch.isString('0.34', { isFloat: true })) // true
+console.log(datamatch.isString('00.34', { isFloat: true })) // false
+console.log(datamatch.isString('0,34', { isFloat: true })) // false
+console.log(datamatch.isString('2', { isFloat: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isInt
+```js
+console.log(datamatch.isNumber(2, { isInt: true })) // true
+console.log(datamatch.isNumber(0.34, { isInt: true })) // false
+
+// If string value is int, you can safely use 'parseInt(value)' without fear of errors.
+console.log(datamatch.isString('2', { isInt: true })) // true
+console.log(datamatch.isString('02', { isInt: true })) // true
+console.log(datamatch.isString('0.34', { isInt: true })) // false
+console.log(datamatch.isString('0,34', { isInt: true })) // false
+console.log(datamatch.isString('00.34', { isInt: true })) // false
+```
+
+[back to top](#table-of-contents)
+
+## isNumeric
+Contains 'isFloat' + 'isInt' logic.
+```js
+console.log(datamatch.isNumber(2, { isNumeric: true })) // true
+console.log(datamatch.isNumber(0.34, { isNumeric: true })) // true
+console.log(datamatch.isNumber(NaN, { isNumeric: true })) // false
+
+console.log(datamatch.isString('2', { isNumeric: true })) // true
+console.log(datamatch.isString('02', { isInt: true })) // true
+console.log(datamatch.isString('0.34', { isInt: true })) // true
+console.log(datamatch.isString('0,34', { isInt: true })) // false
+console.log(datamatch.isString('00.34', { isInt: true })) // false
+console.log(datamatch.isString('NaN', { isInt: true })) // false
+```
 
 [back to top](#table-of-contents)
 

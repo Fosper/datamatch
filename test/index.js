@@ -4,22 +4,23 @@ import datamatch from './../index'
  * Example-1 for 'npm run test':
  */
 
-let penCount = 5 // Replace '5' to 'null' to get 'false'.
-datamatch.isNumber(penCount, { min: 5 }) ? console.log(true) : console.log(false)
+const penCount = 5
+console.log(datamatch.isNumber(penCount, { min: 5 })) // true
+
 
 /**
  * Example-2 for 'npm run test':
  */
 
-let firends = [ `John`, `Katrin`, `Tom` ] // Replace '[ `John`, `Katrin`, `Tom` ]' to '123' to get 'false'.
-datamatch.isArray(firends) ? console.log(true) : console.log(false)
+const firends = [ `John`, `Katrin`, `Tom` ]
+console.log(datamatch.isArray(firends)) // true
 
 
 /**
  * Example-3 for 'npm run test':
  */
 
-let obj = {
+const obj = {
     one: null,
     two: 55,
     three: { four: `Hello` },
