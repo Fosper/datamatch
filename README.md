@@ -319,23 +319,12 @@ Available options: todo.
 Available options: todo.
 
 [back to top](#table-of-contents)
+<!-- # Custom library types
 
-# Custom library types
-
-## isFloat
+## isExample
 Available options: todo.
 
-[back to top](#table-of-contents)
-
-## isInt
-Available options: todo.
-
-[back to top](#table-of-contents)
-
-## isNumeric
-Available options: todo.
-
-[back to top](#table-of-contents)
+[back to top](#table-of-contents) -->
 
 # Options
 
@@ -440,27 +429,27 @@ console.log(datamatch.isString('https://example.com', { isHTTPUrl: true })) // f
 
 ## isHTTPSUrl
 ```js
-console.log(datamatch.isString('https://www.example.com', { isHTTPUrl: true })) // true
-console.log(datamatch.isString('https://example.com', { isHTTPUrl: true })) // true
-console.log(datamatch.isString('http://example.com', { isHTTPUrl: true })) // false
+console.log(datamatch.isString('https://www.example.com', { isHTTPSUrl: true })) // true
+console.log(datamatch.isString('https://example.com', { isHTTPSUrl: true })) // true
+console.log(datamatch.isString('http://example.com', { isHTTPSUrl: true })) // false
 ```
 
 [back to top](#table-of-contents)
 
 ## isWSUrl
 ```js
-console.log(datamatch.isString('ws://www.example.com', { isHTTPUrl: true })) // true
-console.log(datamatch.isString('ws://example.com', { isHTTPUrl: true })) // true
-console.log(datamatch.isString('wss://example.com', { isHTTPUrl: true })) // false
+console.log(datamatch.isString('ws://www.example.com', { isWSUrl: true })) // true
+console.log(datamatch.isString('ws://example.com', { isWSUrl: true })) // true
+console.log(datamatch.isString('wss://example.com', { isWSUrl: true })) // false
 ```
 
 [back to top](#table-of-contents)
 
 ## isWSSUrl
 ```js
-console.log(datamatch.isString('wss://www.example.com', { isHTTPUrl: true })) // true
-console.log(datamatch.isString('wss://example.com', { isHTTPUrl: true })) // true
-console.log(datamatch.isString('ws://example.com', { isHTTPUrl: true })) // false
+console.log(datamatch.isString('wss://www.example.com', { isWSSUrl: true })) // true
+console.log(datamatch.isString('wss://example.com', { isWSSUrl: true })) // true
+console.log(datamatch.isString('ws://example.com', { isWSSUrl: true })) // false
 ```
 
 [back to top](#table-of-contents)
@@ -529,11 +518,11 @@ console.log(datamatch.isNumber(0.34, { isNumeric: true })) // true
 console.log(datamatch.isNumber(NaN, { isNumeric: true })) // false
 
 console.log(datamatch.isString('2', { isNumeric: true })) // true
-console.log(datamatch.isString('02', { isInt: true })) // true
-console.log(datamatch.isString('0.34', { isInt: true })) // true
-console.log(datamatch.isString('0,34', { isInt: true })) // false
-console.log(datamatch.isString('00.34', { isInt: true })) // false
-console.log(datamatch.isString('NaN', { isInt: true })) // false
+console.log(datamatch.isString('02', { isNumeric: true })) // true
+console.log(datamatch.isString('0.34', { isNumeric: true })) // true
+console.log(datamatch.isString('0,34', { isNumeric: true })) // false
+console.log(datamatch.isString('00.34', { isNumeric: true })) // false
+console.log(datamatch.isString('NaN', { isNumeric: true })) // false
 ```
 
 [back to top](#table-of-contents)
