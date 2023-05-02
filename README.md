@@ -6,6 +6,7 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
 ## Table of Contents
 
 - [Installation](#installation)
+- [Update](#update)
 - [Import](#import)
 - [Usage](#usage)
     - [Example 1: Number validation](#example-1-number-validation)
@@ -69,6 +70,16 @@ Install Datamatch using npm:
 
 ```bash
 npm i datamatch
+```
+
+[back to top](#table-of-contents)
+
+# Update
+
+Update Datamatch using npm:
+
+```bash
+npm update datamatch --save
 ```
 
 [back to top](#table-of-contents)
