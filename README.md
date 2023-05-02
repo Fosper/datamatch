@@ -11,6 +11,7 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [Example 1: Number validation](#example-1-number-validation)
     - [Example 2: Array validation](#example-2-array-validation)
     - [Example 3: Nested field validation](#example-3-nested-field-validation)
+    - [Example 4: AND + OR](#example-4-and-+-or)
 - [Default NodeJS types](#default-nodejs-types)
     - [isUndefined](#isundefined)
     - [isNull](#isnull)
