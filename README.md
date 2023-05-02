@@ -230,7 +230,7 @@ Available options:
 
 ## isArray
 Available options:  
-[length](#minlength)  
+[length](#length)  
 [minLength](#minlength)  
 [maxLength](#maxlength)  
 
