@@ -94,11 +94,6 @@ const penCount = 5
 console.log(datamatch.isNumber(penCount, { min: 5 })) // true
 ```
 
-Returns:
-```js
-true
-```
-
 [back to top](#table-of-contents)
 
 ## Example 2: Array validation
@@ -106,11 +101,6 @@ true
 ```js
 const firends = [ `John`, `Katrin`, `Tom` ]
 console.log(datamatch.isArray(firends)) // true
-```
-
-Returns:
-```js
-true
 ```
 
 [back to top](#table-of-contents)
