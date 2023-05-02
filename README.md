@@ -183,8 +183,6 @@ Available options:
 [minLength](#minlength)  
 [maxLength](#maxlength)  
 [values](#values)  
-[isInt](#isint)  
-[isNumeric](#isnumeric)  
 
 [back to top](#table-of-contents)
 
@@ -357,8 +355,8 @@ console.log(datamatch.isBigInt(bigCount, { max: '3199999999999999999999999999999
 console.log(datamatch.isNumber(9, { minLength: 1 })) // true
 console.log(datamatch.isNumber(9, { minLength: 2 })) // false
 
-console.log(datamatch.isBigIng(BigInt('12345'), { minLength: 5 })) // true
-console.log(datamatch.isBigIng(BigInt('12345'), { minLength: 6 })) // false
+console.log(datamatch.isBigInt(BigInt('12345'), { minLength: 5 })) // true
+console.log(datamatch.isBigInt(BigInt('12345'), { minLength: 6 })) // false
 
 console.log(datamatch.isString('Hello', { minLength: 5 })) // true
 console.log(datamatch.isString('Hello', { minLength: 6 })) // false
@@ -374,8 +372,8 @@ console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { minLength: 6 })) // false
 console.log(datamatch.isNumber(9, { maxLength: 1 })) // true
 console.log(datamatch.isNumber(9, { maxLength: 0 })) // false
 
-console.log(datamatch.isBigIng(BigInt('12345'), { maxLength: 5 })) // true
-console.log(datamatch.isBigIng(BigInt('12345'), { maxLength: 4 })) // false
+console.log(datamatch.isBigInt(BigInt('12345'), { maxLength: 5 })) // true
+console.log(datamatch.isBigInt(BigInt('12345'), { maxLength: 4 })) // false
 
 console.log(datamatch.isString('Hello', { maxLength: 5 })) // true
 console.log(datamatch.isString('Hello', { maxLength: 4 })) // false
@@ -391,8 +389,8 @@ console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { maxLength: 4 })) // false
 console.log(datamatch.isNumber(77, { values: [ 53, 77, 99 ] })) // true
 console.log(datamatch.isNumber(77, { values: [ 53, 99 ] })) // false
 
-console.log(datamatch.isBigIng(BigInt('77'), { values: [ BigInt('77'), BigInt('99') ] })) // true
-console.log(datamatch.isBigIng(BigInt('77'), { values: [ BigInt('99') ] })) // false
+console.log(datamatch.isBigInt(BigInt('77'), { values: [ BigInt('77'), BigInt('99') ] })) // true
+console.log(datamatch.isBigInt(BigInt('77'), { values: [ BigInt('99') ] })) // false
 
 console.log(datamatch.isString('Hello', { values: [ 'Hello', 'Bye' ] })) // true
 console.log(datamatch.isString('Hello', { values: [ 'Bye' ] })) // false
