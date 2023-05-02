@@ -147,7 +147,7 @@ if (dm.errors) {
 
 ## Example 4: AND + OR
 That example means field 'hash':
-1. Must be a string
+1. Can be a string
 2. (can be with length 32 AND not domain) OR (can be with length 64)
 
 'isDomain' - just for example 'AND' logic.

@@ -46,8 +46,26 @@ export default class {
     }
 
     field = (fieldName) => {
-        this.currentPath = this.currentPath === `` ? fieldName : `${this.currentPath}.${fieldName}`
-        this.fields.push({ path: this.currentPath, rules: [] })
+        if (!this.fields.length) {
+            this.currentPath = fieldName
+        } else if (this.fields.at(-1).rules.length) {
+            if (this.currentPath.includes(`.`)) {
+                let path = this.currentPath.split(`.`)
+                path.pop()
+                this.currentPath = `${path.join(`.`)}.${fieldName}`
+            } else {
+                this.currentPath = fieldName
+            }
+        } else {
+            this.fields.at(-1).isObject = true
+            if (this.currentPath.length) {
+                this.currentPath = `${this.currentPath}.${fieldName}`
+            } else {
+                this.currentPath = fieldName
+            }
+        }
+
+        this.fields.push({ path: this.currentPath, rules: [], isObject: false })
         return this
     }
 
@@ -59,6 +77,13 @@ export default class {
         if (parentIndex !== -1) {
             const parentElement = this.fields.splice(parentIndex, 1)[0]
             this.fields.push(parentElement)
+        }
+        if (this.fields.at(-1).path.includes(`.`)) {
+            let path = this.fields.at(-1).path.split(`.`)
+            path.pop()
+            this.currentPath = path.join(`.`)
+        } else {
+            this.currentPath = ``
         }
         return this
     }
@@ -83,10 +108,6 @@ export default class {
 
     addRule = (ruleName, opt) => {
         this.fields.at(-1).rules.push([ruleName, opt])
-    }
-
-    resetCurrentPath = () => {
-        this.currentPath = ``
         return this
     }
 
@@ -95,8 +116,18 @@ export default class {
         const allErrors = []
         let noErrors = false
 
+        let errors = []
+        if (field.isObject) errors = this.checkType(`Object`, fieldValue, {}, field.path)
+        if (errors.length) {
+            if (Array.isArray(errors)) {
+                allErrors.push(...errors)
+            } else {
+                allErrors.push(errors)
+            }
+        }
+        
         for (const [ruleName, fieldOptions] of field.rules) {
-            let errors = this.checkType(ruleName, fieldValue, fieldOptions, field.path)
+            errors = this.checkType(ruleName, fieldValue, fieldOptions, field.path)
             if (errors.length) {
                 if (Array.isArray(errors)) {
                     allErrors.push(...errors)
@@ -120,35 +151,35 @@ export default class {
     }
 
     // Default types:
-    isUndefined = (opt = {}) => { this.addRule(`Undefined`, opt); return this.resetCurrentPath() }
-    isNull = (opt = {}) => { this.addRule(`Null`, opt); return this.resetCurrentPath() }
-    isBoolean = (opt = {}) => { this.addRule(`Boolean`, opt); return this.resetCurrentPath() }
-    isNumber = (opt = {}) => { this.addRule(`Number`, opt); return this.resetCurrentPath() }
-    isBigInt = (opt = {}) => { this.addRule(`BigInt`, opt); return this.resetCurrentPath() }
-    isString = (opt = {}) => { this.addRule(`String`, opt); return this.resetCurrentPath() }
-    isArray = (opt = {}) => { this.addRule(`Array`, opt); return this.resetCurrentPath() }
-    isObject = (opt = {}) => { this.addRule(`Object`, opt); return this.resetCurrentPath() }
-    isFunction = (opt = {}) => { this.addRule(`Function`, opt); return this.resetCurrentPath() }
-    isAsyncFunction = (opt = {}) => { this.addRule(`AsyncFunction`, opt); return this.resetCurrentPath() }
-    isPromise = (opt = {}) => { this.addRule(`Promise`, opt); return this.resetCurrentPath() }
-    isSymbol = (opt = {}) => { this.addRule(`Symbol`, opt); return this.resetCurrentPath() }
-    isArrayBuffer = (opt = {}) => { this.addRule(`ArrayBuffer`, opt); return this.resetCurrentPath() }
-    isSet = (opt = {}) => { this.addRule(`Set`, opt); return this.resetCurrentPath() }
-    isMap = (opt = {}) => { this.addRule(`Map`, opt); return this.resetCurrentPath() }
-    isDate = (opt = {}) => { this.addRule(`Date`, opt); return this.resetCurrentPath() }
-    isRegExp = (opt = {}) => { this.addRule(`RegExp`, opt); return this.resetCurrentPath() }
-    isDataView = (opt = {}) => { this.addRule(`DataView`, opt); return this.resetCurrentPath() }
-    isInt8Array = (opt = {}) => { this.addRule(`Int8Array`, opt); return this.resetCurrentPath() }
-    isInt16Array = (opt = {}) => { this.addRule(`Int16Array`, opt); return this.resetCurrentPath() }
-    isInt32Array = (opt = {}) => { this.addRule(`Int32Array`, opt); return this.resetCurrentPath() }
-    isUint8Array = (opt = {}) => { this.addRule(`Uint8Array`, opt); return this.resetCurrentPath() }
-    isUint16Array = (opt = {}) => { this.addRule(`Uint16Array`, opt); return this.resetCurrentPath() }
-    isUint32Array = (opt = {}) => { this.addRule(`Uint32Array`, opt); return this.resetCurrentPath() }
-    isFloat32Array = (opt = {}) => { this.addRule(`Float32Array`, opt); return this.resetCurrentPath() }
-    isFloat64Array = (opt = {}) => { this.addRule(`Float64Array`, opt); return this.resetCurrentPath() }
-    isUint8ClampedArray = (opt = {}) => { this.addRule(`Uint8ClampedArray`, opt); return this.resetCurrentPath() }
-    isSharedArrayBuffer = (opt = {}) => { this.addRule(`SharedArrayBuffer`, opt); return this.resetCurrentPath() }
+    isUndefined = (opt = {}) => { return this.addRule(`Undefined`, opt) }
+    isNull = (opt = {}) => { return this.addRule(`Null`, opt) }
+    isBoolean = (opt = {}) => { return this.addRule(`Boolean`, opt) }
+    isNumber = (opt = {}) => { return this.addRule(`Number`, opt) }
+    isBigInt = (opt = {}) => { return this.addRule(`BigInt`, opt) }
+    isString = (opt = {}) => { return this.addRule(`String`, opt) }
+    isArray = (opt = {}) => { return this.addRule(`Array`, opt) }
+    isObject = (opt = {}) => { return this.addRule(`Object`, opt) }
+    isFunction = (opt = {}) => { return this.addRule(`Function`, opt) }
+    isAsyncFunction = (opt = {}) => { return this.addRule(`AsyncFunction`, opt) }
+    isPromise = (opt = {}) => { return this.addRule(`Promise`, opt) }
+    isSymbol = (opt = {}) => { return this.addRule(`Symbol`, opt) }
+    isArrayBuffer = (opt = {}) => { return this.addRule(`ArrayBuffer`, opt) }
+    isSet = (opt = {}) => { return this.addRule(`Set`, opt) }
+    isMap = (opt = {}) => { return this.addRule(`Map`, opt) }
+    isDate = (opt = {}) => { return this.addRule(`Date`, opt) }
+    isRegExp = (opt = {}) => { return this.addRule(`RegExp`, opt) }
+    isDataView = (opt = {}) => { return this.addRule(`DataView`, opt) }
+    isInt8Array = (opt = {}) => { return this.addRule(`Int8Array`, opt) }
+    isInt16Array = (opt = {}) => { return this.addRule(`Int16Array`, opt) }
+    isInt32Array = (opt = {}) => { return this.addRule(`Int32Array`, opt) }
+    isUint8Array = (opt = {}) => { return this.addRule(`Uint8Array`, opt) }
+    isUint16Array = (opt = {}) => { return this.addRule(`Uint16Array`, opt) }
+    isUint32Array = (opt = {}) => { return this.addRule(`Uint32Array`, opt) }
+    isFloat32Array = (opt = {}) => { return this.addRule(`Float32Array`, opt) }
+    isFloat64Array = (opt = {}) => { return this.addRule(`Float64Array`, opt) }
+    isUint8ClampedArray = (opt = {}) => { return this.addRule(`Uint8ClampedArray`, opt) }
+    isSharedArrayBuffer = (opt = {}) => { return this.addRule(`SharedArrayBuffer`, opt) }
 
     // Custom types:
-    isExample = (opt = {}) => { this.addRule(`Example`, opt); return this.resetCurrentPath() }
+    isExample = (opt = {}) => { return this.addRule(`Example`, opt) }
 }
