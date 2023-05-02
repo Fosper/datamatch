@@ -40,11 +40,11 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [isFloat64Array](#isfloat64array)
     - [isUint8ClampedArray](#isuint8clampedarray)
     - [isSharedArrayBuffer](#issharedarraybuffer)
-<!-- - [Custom library types](#custom-library-types)
-    - [isFloat](#isfloat) -->
+<!-- - [Custom library types](#custom-library-types) - [isExample](#isexample) -->
 - [Options](#options)
     - [min](#min)
     - [max](#max)
+    - [length](#length)
     - [minLength](#minlength)
     - [maxLength](#maxlength)
     - [values](#values)
@@ -117,7 +117,7 @@ true
 ## Example 3: Nested field validation
 
 ```js
-let obj = {
+const obj = {
     one: null,
     two: 55,
     three: { four: 'Hello' },
@@ -137,11 +137,39 @@ if (dm.errors) {
 } else {
     console.log(true)
 }
+
+// Returns: true
 ```
 
-Returns:
+[back to top](#table-of-contents)
+
+## Example 4: AND + OR
+That example means field 'hash':
+1. Must be a string
+2. (can be with length 32 AND not domain) OR (can be with length 64)
+
+'isDomain' - just for example 'AND' logic.
 ```js
-true
+const getTrueOrFalse = () => { return Math.random() >= 0.5 }
+const getMD5 = () => { return '191c7d10892d7377d0ca306bc8a96c8b' }
+const getSHA256 = () => { return 'd1af65ff329128e24de02418050fc8afca2a626f9f417424aecc5890a6a8f0f5' }
+
+const obj = {
+    hash: getTrueOrFalse() ? getMD5() : getSHA256()
+}
+
+const dm = datamatch.init()
+    .field('hash').isString({ length: 32, isDomain: false }).isString({ length: 64 })
+    .check(obj)
+
+if (dm.errors) {
+    console.log(dm.errors) // Shows all fields path and whats wrong.
+    console.log(false)
+} else {
+    console.log(true)
+}
+
+// Returns: true
 ```
 
 [back to top](#table-of-contents)
@@ -167,6 +195,7 @@ Available options: todo.
 Available options:  
 [min](#min)  
 [max](#max)  
+[length](#length)  
 [minLength](#minlength)  
 [maxLength](#maxlength)  
 [values](#values)  
@@ -180,6 +209,7 @@ Available options:
 Available options:  
 [min](#min)  
 [max](#max)  
+[length](#length)  
 [minLength](#minlength)  
 [maxLength](#maxlength)  
 [values](#values)  
@@ -188,6 +218,7 @@ Available options:
 
 ## isString
 Available options:  
+[minLength](#length)  
 [minLength](#minlength)  
 [maxLength](#maxlength)  
 [values](#values)  
@@ -208,6 +239,7 @@ Available options:
 
 ## isArray
 Available options:  
+[length](#minlength)  
 [minLength](#minlength)  
 [maxLength](#maxlength)  
 
@@ -349,6 +381,23 @@ console.log(datamatch.isBigInt(bigCount, { max: '3199999999999999999999999999999
 ```
 
 [back to top](#table-of-contents)
+
+## length
+```js
+console.log(datamatch.isNumber(9, { length: 1 })) // true
+console.log(datamatch.isNumber(9, { length: 2 })) // false
+
+console.log(datamatch.isBigInt(BigInt('12345'), { length: 5 })) // true
+console.log(datamatch.isBigInt(BigInt('12345'), { length: 4 })) // false
+
+console.log(datamatch.isString('Hello', { length: 5 })) // true
+console.log(datamatch.isString('Hello', { length: 4 })) // false
+console.log(datamatch.isString('Hello', { length: 6 })) // false
+
+console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { length: 5 })) // true
+console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { length: 4 })) // false
+console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { length: 6 })) // false
+```
 
 ## minLength
 ```js

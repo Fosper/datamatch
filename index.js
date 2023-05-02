@@ -65,12 +65,12 @@ export default class {
 
     check = (obj) => {
         let result = { data: true, errors: null }
-        this.reset()
         for (const field of this.fields) this.validateField(field, obj)
         if (this.errors.length) {
             result.data = false
             result.errors = [ ...this.errors ]
         }
+        this.reset()
         return result
     }
 
