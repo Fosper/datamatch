@@ -129,8 +129,10 @@ const obj = {
 const dm = datamatch.init()
     .field('one').isNull()
     .field('two').isNumber({ min: 55 })
-    .field('three').field('four').isString({ minLength: 5 }).end()
-    .field('five').field('six').isArray()
+    .field('three')
+        .field('four').isString({ minLength: 5 }).end()
+    .field('five')
+        .field('six').isArray()
     .check(obj)
 
 if (dm.errors) {
