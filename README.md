@@ -50,6 +50,7 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [minLength](#minlength)
     - [maxLength](#maxlength)
     - [values](#values)
+    - [isDate](#isdate)
     - [isDomain](#isdomain)
     - [isUrl](#isurl)
     - [isHTTPUrl](#ishttpUrl)
@@ -226,6 +227,7 @@ Available options:
 [minLength](#minlength)  
 [maxLength](#maxlength)  
 [values](#values)  
+[isDate](#isdate)  
 [isDomain](#isdomain)  
 [isUrl](#isurl)  
 [isHTTPUrl](#ishttpUrl)  
@@ -451,6 +453,15 @@ console.log(datamatch.isString('Hello', { values: [ 'Bye' ] })); // false
 
 [back to top](#table-of-contents)
 
+## isDate
+If string value is date (true), you can safely use 'new Date(value)' without fear of errors.
+```js
+console.log(datamatch.isString('Thu, 31 Oct 2024 07:28:00 GMT', { isDate: true })); // true
+console.log(datamatch.isString('Thu, 32 Oct 2024 07:28:00 GMT', { isDate: true })); // false
+```
+
+[back to top](#table-of-contents)
+
 ## isDomain
 ```js
 console.log(datamatch.isString('www.example.com', { isDomain: true })); // true
@@ -533,11 +544,11 @@ console.log(datamatch.isString('192.168.0.256', { isIPv6: true })); // false
 [back to top](#table-of-contents)
 
 ## isFloat
+If string value is float (true), you can safely use 'parseFloat(value)' without fear of errors.
 ```js
 console.log(datamatch.isNumber(0.34, { isFloat: true })); // true
 console.log(datamatch.isNumber(2, { isFloat: true })); // false
 
-// If string value is float, you can safely use 'parseFloat(value)' without fear of errors.
 console.log(datamatch.isString('0.34', { isFloat: true })); // true
 console.log(datamatch.isString('00.34', { isFloat: true })); // false
 console.log(datamatch.isString('0,34', { isFloat: true })); // false
@@ -547,11 +558,11 @@ console.log(datamatch.isString('2', { isFloat: true })); // false
 [back to top](#table-of-contents)
 
 ## isInt
+If string value is int (true), you can safely use 'parseInt(value)' without fear of errors.
 ```js
 console.log(datamatch.isNumber(2, { isInt: true })); // true
 console.log(datamatch.isNumber(0.34, { isInt: true })); // false
 
-// If string value is int, you can safely use 'parseInt(value)' without fear of errors.
 console.log(datamatch.isString('2', { isInt: true })); // true
 console.log(datamatch.isString('02', { isInt: true })); // true
 console.log(datamatch.isString('0.34', { isInt: true })); // false
