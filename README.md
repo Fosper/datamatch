@@ -50,7 +50,7 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [minLength](#minlength)
     - [maxLength](#maxlength)
     - [values](#values)
-    - [isDate](#isdate)
+    - [isDate](#optisdate)
     - [isDomain](#isdomain)
     - [isUrl](#isurl)
     - [isHTTPUrl](#ishttpUrl)
@@ -227,7 +227,7 @@ Available options:
 [minLength](#minlength)  
 [maxLength](#maxlength)  
 [values](#values)  
-[isDate](#isdate)  
+[isDate](#isdateopt)  
 [isDomain](#isdomain)  
 [isUrl](#isurl)  
 [isHTTPUrl](#ishttpUrl)  
@@ -453,7 +453,7 @@ console.log(datamatch.isString('Hello', { values: [ 'Bye' ] })); // false
 
 [back to top](#table-of-contents)
 
-## isDate
+## isDate {#isdateopt}
 If string value is date (true), you can safely use 'new Date(value)' without fear of errors.
 ```js
 console.log(datamatch.isString('Thu, 31 Oct 2024 07:28:00 GMT', { isDate: true })); // true
