@@ -472,6 +472,7 @@ console.log(datamatch.isString('example@.com', { isDomain: true })); // false
 [back to top](#table-of-contents)
 
 ## isUrl
+If string value is url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
 console.log(datamatch.isString('https://www.example.com', { isUrl: true })); // true
 console.log(datamatch.isString('https://example.com', { isUrl: true })); // true
@@ -481,6 +482,7 @@ console.log(datamatch.isString('example.com', { isUrl: true })); // false
 [back to top](#table-of-contents)
 
 ## isHTTPUrl
+If string value is HTTP url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
 console.log(datamatch.isString('http://www.example.com', { isHTTPUrl: true })); // true
 console.log(datamatch.isString('http://example.com', { isHTTPUrl: true })); // true
@@ -490,6 +492,7 @@ console.log(datamatch.isString('https://example.com', { isHTTPUrl: true })); // 
 [back to top](#table-of-contents)
 
 ## isHTTPSUrl
+If string value is HTTPS url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
 console.log(datamatch.isString('https://www.example.com', { isHTTPSUrl: true })); // true
 console.log(datamatch.isString('https://example.com', { isHTTPSUrl: true })); // true
@@ -499,6 +502,7 @@ console.log(datamatch.isString('http://example.com', { isHTTPSUrl: true })); // 
 [back to top](#table-of-contents)
 
 ## isWSUrl
+If string value is WS url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
 console.log(datamatch.isString('ws://www.example.com', { isWSUrl: true })); // true
 console.log(datamatch.isString('ws://example.com', { isWSUrl: true })); // true
@@ -508,6 +512,7 @@ console.log(datamatch.isString('wss://example.com', { isWSUrl: true })); // fals
 [back to top](#table-of-contents)
 
 ## isWSSUrl
+If string value is WSS url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
 console.log(datamatch.isString('wss://www.example.com', { isWSSUrl: true })); // true
 console.log(datamatch.isString('wss://example.com', { isWSSUrl: true })); // true
