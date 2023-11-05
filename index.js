@@ -45,10 +45,10 @@ export default class {
         this.currentPath = ``
     }
 
-    field = (fieldName) => {
+    field = (fieldName, checkNextObjectIfExist = false) => {
         if (!this.fields.length) {
             this.currentPath = fieldName
-        } else if (this.fields.at(-1).rules.length) {
+        } else if (this.fields.at(-1).rules.length && !this.fields.at(-1).checkNextObjectIfExist) {
             if (this.currentPath.includes(`.`)) {
                 let path = this.currentPath.split(`.`)
                 path.pop()
@@ -65,7 +65,8 @@ export default class {
             }
         }
 
-        this.fields.push({ path: this.currentPath, rules: [], isObject: false })
+        this.fields.push({ path: this.currentPath, rules: [], isObject: false, checkNextObjectIfExist, currentType: `` })
+        if (checkNextObjectIfExist) this.isObject()
         return this
     }
 
@@ -113,11 +114,13 @@ export default class {
 
     validateField = (field, obj) => {
         const fieldValue = this.getValueByPath(obj, field.path)
+        field.currentType = Object.prototype.toString.call(fieldValue).split(` `)[1].replace(`]`, ``)
+
         const allErrors = []
         let noErrors = false
 
         let errors = []
-        if (field.isObject) errors = this.checkType(`Object`, fieldValue, {}, field.path)
+        if (field.isObject && !field.checkNextObjectIfExist) errors = this.checkType(`Object`, fieldValue, {}, field.path)
         if (errors.length) {
             if (Array.isArray(errors)) {
                 allErrors.push(...errors)
@@ -126,20 +129,40 @@ export default class {
             }
         }
         
-        for (const [ruleName, fieldOptions] of field.rules) {
-            errors = this.checkType(ruleName, fieldValue, fieldOptions, field.path)
-            if (errors.length) {
-                if (Array.isArray(errors)) {
-                    allErrors.push(...errors)
-                    continue
+        let check = true
+        const parentField = this.getParentField(field.path)
+        if (parentField && parentField.checkNextObjectIfExist && parentField.currentPath !== `Object`) {
+            check = false
+        }
+
+        if (check) {
+            for (const [ruleName, fieldOptions] of field.rules) {
+                errors = this.checkType(ruleName, fieldValue, fieldOptions, field.path)
+                if (errors.length) {
+                    if (Array.isArray(errors)) {
+                        allErrors.push(...errors)
+                        continue
+                    }
+                    allErrors.push(errors)
+                } else {
+                    noErrors = true
                 }
-                allErrors.push(errors)
-            } else {
-                noErrors = true
             }
         }
 
         if (!noErrors && allErrors.length > 0) this.errors.push(...allErrors)
+    }
+
+    getParentField = (path) => {
+        let result = null
+
+        if (!path.includes(`.`)) return result
+        path = path.slice(0, path.lastIndexOf(`.`))
+        for (const field of this.fields) {
+            if (field.path === path) return field
+        }
+
+        return result
     }
 
     getValueByPath = (obj, path) => {
