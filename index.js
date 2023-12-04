@@ -1,10 +1,9 @@
 'use strict'
 
 import types from './lib/types'
-import isExample from './lib/types/isExample'
 
 export default class {
-    // Default static types:
+    // Static primitives:
     static isUndefined = (...opt) => types.default(`Undefined`, opt)
     static isNull = (...opt) => types.default(`Null`, opt)
     static isBoolean = (...opt) => types.default(`Boolean`, opt)
@@ -33,9 +32,6 @@ export default class {
     static isFloat64Array = (...opt) => types.default(`Float64Array`, opt)
     static isUint8ClampedArray = (...opt) => types.default(`Uint8ClampedArray`, opt)
     static isSharedArrayBuffer = (...opt) => types.default(`SharedArrayBuffer`, opt)
-
-    // Custom static types:
-    static isExample = isExample
 
     static init = () => { return new this() }
 
@@ -173,7 +169,7 @@ export default class {
         return this.constructor[`is${ruleName}`](fieldValue, fieldOptions, true, fieldPath)
     }
 
-    // Default types:
+    // Primitives:
     isUndefined = (opt = {}) => { return this.addRule(`Undefined`, opt) }
     isNull = (opt = {}) => { return this.addRule(`Null`, opt) }
     isBoolean = (opt = {}) => { return this.addRule(`Boolean`, opt) }
@@ -203,6 +199,24 @@ export default class {
     isUint8ClampedArray = (opt = {}) => { return this.addRule(`Uint8ClampedArray`, opt) }
     isSharedArrayBuffer = (opt = {}) => { return this.addRule(`SharedArrayBuffer`, opt) }
 
-    // Custom types:
-    isExample = (opt = {}) => { return this.addRule(`Example`, opt) }
+    // Options:
+    isDate = () => { return this.fields.at(-1).rules.at(-1)[1]['isDate'] = true, this }
+    isDomain = () => { return this.fields.at(-1).rules.at(-1)[1]['isDomain'] = true, this }
+    isFloat = () => { return this.fields.at(-1).rules.at(-1)[1]['isFloat'] = true, this }
+    isHTTPSUrl = () => { return this.fields.at(-1).rules.at(-1)[1]['isHTTPSUrl'] = true, this }
+    isHTTPUrl = () => { return this.fields.at(-1).rules.at(-1)[1]['isHTTPUrl'] = true, this }
+    isInt = () => { return this.fields.at(-1).rules.at(-1)[1]['isInt'] = true, this }
+    isIP = () => { return this.fields.at(-1).rules.at(-1)[1]['isIP'] = true, this }
+    isIPv4 = () => { return this.fields.at(-1).rules.at(-1)[1]['isIPv4'] = true, this }
+    isIPv6 = () => { return this.fields.at(-1).rules.at(-1)[1]['isIPv6'] = true, this }
+    isNumeric = () => { return this.fields.at(-1).rules.at(-1)[1]['isNumeric'] = true, this }
+    isUrl = () => { return this.fields.at(-1).rules.at(-1)[1]['isUrl'] = true, this }
+    isWSSUrl = () => { return this.fields.at(-1).rules.at(-1)[1]['isWSSUrl'] = true, this }
+    isWSUrl = () => { return this.fields.at(-1).rules.at(-1)[1]['isWSUrl'] = true, this }
+    length = () => { return this.fields.at(-1).rules.at(-1)[1]['length'] = number, this }
+    max = () => { return this.fields.at(-1).rules.at(-1)[1]['max'] = number, this }
+    maxLength = () => { return this.fields.at(-1).rules.at(-1)[1]['maxLength'] = number, this }
+    min = () => { return this.fields.at(-1).rules.at(-1)[1]['min'] = number, this }
+    minLength = () => { return this.fields.at(-1).rules.at(-1)[1]['minLength'] = number, this }
+    values = () => { return this.fields.at(-1).rules.at(-1)[1]['values'] = array, this }
 }

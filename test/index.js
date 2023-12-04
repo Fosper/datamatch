@@ -68,3 +68,23 @@ if (dm.errors) {
  }
  
  // Returns: true
+
+
+ /**
+ * Example-5 for 'npm run test':
+ */
+
+const obj3 = {
+    one: '192.168.1.1',
+};
+
+const dm3 = datamatch.init()
+    .field('one').isString().isIP()
+    .check(obj3);
+
+if (dm3.errors) {
+    console.log(dm3.errors);
+    console.log(false);
+} else {
+    console.log(true);
+}
