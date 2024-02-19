@@ -15,7 +15,7 @@ export default (optionName, optionValue, optionValueType, path, type, value, inA
                 break
             }
             if (value < optionValue) {
-                result = `${inArray ? `Array element in field` : `Field`} '${path}' must be less than '${optionValue.toString()}'. '${value.toString()}' given.`
+                result = `${inArray ? `Array element in field` : `Field`} '${path}' must be more or equal than '${optionValue.toString()}'. '${value.toString()}' given.`
             }
             break
         case `BigInt`:
@@ -24,7 +24,7 @@ export default (optionName, optionValue, optionValueType, path, type, value, inA
                 break
             }
             if (value < BigInt(optionValue)) {
-                result = `${inArray ? `Array element in field` : `Field`} '${path}' must be less than '${optionValue.toString()}'.`
+                result = `${inArray ? `Array element in field` : `Field`} '${path}' must be more or equal than '${optionValue.toString()}'.`
             }
             break
     }

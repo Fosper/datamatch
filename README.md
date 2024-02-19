@@ -203,7 +203,7 @@ if (run.errors) {
     console.log(true);
 }
 
-// Returns: [ "Array element in field 'five.six' must be more than '122'. '123' given." ]
+// Returns: [ "Array element in field 'five.six' must be less or equal than '122'. '123' given." ]
 ```
 
 IMPORTANT: Always use '.end()' to close .isObject() and .isArray() constructions.
