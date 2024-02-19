@@ -325,10 +325,10 @@ Available options:
 [isIP](#isip)  
 [isIPv4](#isipv4)  
 [isIPv6](#isipv6)  
+[isJSON](#isjson)  
 [isFloat](#isfloat)  
 [isInt](#isint)  
 [isNumeric](#isnumeric)  
-[isJSON](#isjson)  
 
 [back to top](#table-of-contents)
 
