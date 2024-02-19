@@ -1,7 +1,10 @@
 # Datamatch - Simple and Fast Data Validation for Node.js
+
+MAJOR UPDATE v2
+
 Datamatch is a user-friendly and easy-to-use JavaScript library for data validation without any dependencies. It allows you to validate input values against specific criteria and returns the validation result. This library is designed for use in Node.js projects. It is perfect for developers who need a fast and reliable way to validate data.
 
-IMPORTANT: Data types and check options are updated every week. Contact issues to add custom data types and options.
+IMPORTANT: Data types and check options are updated every week. Contact issues to add custom data TYPES and OPTIONS.
 
 ## Table of Contents
 
@@ -10,10 +13,14 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
 - [Import](#import)
 - [Usage](#usage)
     - [Example 1: Number validation](#example-1-number-validation)
-    - [Example 2: Array validation](#example-2-array-validation)
-    - [Example 3: Nested field validation](#example-3-nested-field-validation)
-    - [Example 4: AND + OR](#example-4-and-+-or)
-- [Default NodeJS types](#default-nodejs-types)
+    - [Example 2: Number validation with options](#example-2-number-validation-with-options)
+    - [Example 3: Array validation](#example-3-array-validation)
+    - [Example 4: Array validation with options](#example-4-array-validation-with-options)
+    - [Example 5: Nested field validation](#example-5-nested-field-validation)
+    - [Example 6: Nested field validation with options](#example-6-nested-field-validation-with-options)
+    - [Example 7: AND logic](#example-7-and-logic)
+    - [Example 8: OR logic](#example-8-or-logic)
+- [Default NodeJS TYPES](#default-nodejs-types)
     - [isUndefined](#isundefined)
     - [isNull](#isnull)
     - [isBoolean](#isboolean)
@@ -42,8 +49,7 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [isFloat64Array](#isfloat64array)
     - [isUint8ClampedArray](#isuint8clampedarray)
     - [isSharedArrayBuffer](#issharedarraybuffer)
-<!-- - [Custom library types](#custom-library-types) - [isExample](#isexample) -->
-- [Options](#options)
+- [OPTIONS](#options)
     - [min](#min)
     - [max](#max)
     - [length](#length)
@@ -60,6 +66,7 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [isIP](#isip)
     - [isIPv4](#isipv4)
     - [isIPv6](#isipv6)
+    - [isJSON](#isjson)
     - [isFloat](#isfloat)
     - [isInt](#isint)
     - [isNumeric](#isnumeric)
@@ -80,7 +87,7 @@ npm i datamatch
 Update Datamatch using npm:
 
 ```bash
-npm update datamatch --save
+npm install datamatch@latest
 ```
 
 [back to top](#table-of-contents)
@@ -88,11 +95,11 @@ npm update datamatch --save
 # Import
 
 ```js
-import datamatch from 'datamatch';
+import Datamatch from 'datamatch';
 ```
 OR
 ```js
-const datamatch = require('datamatch');
+const Datamatch = require('datamatch');
 ```
 
 [back to top](#table-of-contents)
@@ -103,96 +110,177 @@ const datamatch = require('datamatch');
 
 ```js
 const penCount = 5;
-console.log(datamatch.isNumber(penCount, { min: 5 })); // true
+console.log(Datamatch.isNumber(penCount)); // true
 ```
 
 [back to top](#table-of-contents)
 
-## Example 2: Array validation
+## Example 2: Number validation with options
+
+```js
+const penCount = 5;
+console.log(Datamatch.isNumber(penCount, { max: 4 })); // false
+```
+
+[back to top](#table-of-contents)
+
+## Example 3: Array validation
 
 ```js
 const firends = [ `John`, `Katrin`, `Tom` ];
-console.log(datamatch.isArray(firends)); // true
+console.log(Datamatch.isArray(firends)); // true
 ```
 
 [back to top](#table-of-contents)
 
-## Example 3: Nested field validation
+## Example 4: Array validation with options
+
+```js
+const firends = [ `John`, `Katrin`, `Tom` ];
+console.log(Datamatch.isArray(firends, { maxLength: 2 })); // false
+```
+
+[back to top](#table-of-contents)
+
+## Example 5: Nested field validation
 
 ```js
 const obj = {
     one: null,
     two: 55,
     three: { four: 'Hello' },
-    five: { six: [ 'John', 'Katrin' ] }
+    five: { six: [ 'John', 'Katrin', 123 ] }
 };
 
-const dm = datamatch.init()
+const run = Datamatch.init()
     .field('one').isNull()
-    .field('two').isNumber({ min: 55 })
-    .field('three')
-        .field('four').isString({ minLength: 5 }).end()
-    .field('five')
-        .field('six').isArray()
+    .field('two').isNumber()
+    .field('three').isObject()
+        .field('four').isString()
+    .end()
+    .field('five').isObject()
+        .field('six').isArray().isString().isNumber().end()
+    .end()
     .check(obj);
 
-if (dm.errors) {
-    console.log(dm.errors); // Shows all fields path and whats wrong.
-    console.log(false);
+if (run.errors) {
+    console.log(run.errors); // Shows all fields path and whats wrong.
 } else {
     console.log(true);
 }
 
 // Returns: true
 ```
+
+IMPORTANT: Always use '.end()' to close .isObject()... .end() and .isArray()... .end() constructions.
 
 [back to top](#table-of-contents)
 
-## Example 4: AND + OR
-That example means field 'hash':
-1. Can be a string
-2. (can be with length 32 AND not domain) OR (can be with length 64)
+## Example 6: Nested field validation with options
 
-'isDomain' - just for example 'AND' logic.
 ```js
-const getTrueOrFalse = () => { return Math.random() >= 0.5 };
-const getMD5 = () => { return '191c7d10892d7377d0ca306bc8a96c8b' };
-const getSHA256 = () => { return 'd1af65ff329128e24de02418050fc8afca2a626f9f417424aecc5890a6a8f0f5' };
-
 const obj = {
-    hash: getTrueOrFalse() ? getMD5() : getSHA256()
+    one: null,
+    two: 55,
+    three: { four: 'Hello' },
+    five: { six: [ 'John', 'Katrin', 123 ] }
 };
 
-const dm = datamatch.init()
-    .field('hash').isString({ length: 32, isDomain: false }).isString({ length: 64 })
+const run = Datamatch.init()
+    .field('one').isNull()
+    .field('two').isNumber()
+    .field('three').isObject()
+        .field('four').isString()
+    .end()
+    .field('five').isObject()
+        .field('six').isArray().isString().isNumber({ max: 122 }).end()
+    .end()
     .check(obj);
 
-if (dm.errors) {
-    console.log(dm.errors); // Shows all fields path and whats wrong.
-    console.log(false);
+if (run.errors) {
+    console.log(run.errors); // Shows all fields path and whats wrong.
+} else {
+    console.log(true);
+}
+
+// Returns: [ "Array element in field 'five.six' must be more than '122'. '123' given." ]
+```
+
+IMPORTANT: Always use '.end()' to close .isObject()... .end() and .isArray()... .end() constructions.
+
+[back to top](#table-of-contents)
+
+## Example 7: AND logic
+
+OPTIONS always means AND logic
+
+For example:
+
+```js
+const obj = {
+    login: 'john',
+};
+
+const run = Datamatch.init()
+    .field('login').isString({ minLength: 4, values: ['john', `alex`]})
+    .check(obj);
+
+if (run.errors) {
+    console.log(run.errors); // Shows all fields path and whats wrong.
 } else {
     console.log(true);
 }
 
 // Returns: true
 ```
+
+Field 'login' must have minimum length 4, AND contain one of values 'john' /' alex'.
+
+[back to top](#table-of-contents)
+
+## Example 8: OR logic
+
+TYPES always means OR logic
+
+For example:
+
+```js
+const obj = {
+    login: 'john',
+};
+
+const run = Datamatch.init()
+    .field('login').isString()
+    .field('password').isUndefined().isString()
+    .check(obj);
+
+if (run.errors) {
+    console.log(run.errors); // Shows all fields path and whats wrong.
+} else {
+    console.log(true);
+}
+
+// Returns: true
+```
+
+Field 'password' can be do not set, OR set as string.
 
 [back to top](#table-of-contents)
 
 # Default NodeJS types
 
 ## isUndefined
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isNull
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isBoolean
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
@@ -240,6 +328,7 @@ Available options:
 [isFloat](#isfloat)  
 [isInt](#isint)  
 [isNumeric](#isnumeric)  
+[isJSON](#isjson)  
 
 [back to top](#table-of-contents)
 
@@ -252,203 +341,197 @@ Available options:
 [back to top](#table-of-contents)
 
 ## isObject
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isFunction
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isAsyncFunction
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isPromise
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isSymbol
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isArrayBuffer
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isSet
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isMap
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isDate
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isRegExp
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isDataView
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isInt8Array
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isInt16Array
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isInt32Array
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isUint8Array
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isUint16Array
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isUint32Array
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isFloat32Array
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isFloat64Array
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isUint8ClampedArray
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
 
 ## isSharedArrayBuffer
-Available options: todo.
+Available options: no.
 
 [back to top](#table-of-contents)
-<!-- # Custom library types
-
-## isExample
-Available options: todo.
-
-[back to top](#table-of-contents) -->
 
 # Options
 
 ## min
 ```js
-console.log(datamatch.isNumber(5, { min: 5 })); // true
-console.log(datamatch.isNumber(5, { min: 6 })); // false
+console.log(Datamatch.isNumber(5, { min: 5 })); // true
+console.log(Datamatch.isNumber(5, { min: 6 })); // false
 
 const ants = BigInt('1000000000000000000000000000000');
-console.log(datamatch.isBigInt(big, { min: '1000000000000000000000000000000' })); // true
-console.log(datamatch.isBigInt(big, { min: '1000000000000000000000000000001' })); // false
+console.log(Datamatch.isBigInt(big, { min: '1000000000000000000000000000000' })); // true
+console.log(Datamatch.isBigInt(big, { min: '1000000000000000000000000000001' })); // false
 ```
 
 [back to top](#table-of-contents)
 
 ## max
 ```js
-console.log(datamatch.isNumber(5, { max: 5 })); // true
-console.log(datamatch.isNumber(5, { max: 4 })); // false
+console.log(Datamatch.isNumber(5, { max: 5 })); // true
+console.log(Datamatch.isNumber(5, { max: 4 })); // false
 
 const atoms = BigInt('3200000000000000000000000000000')
-console.log(datamatch.isBigInt(bigCount, { max: '3200000000000000000000000000000' })); // true
-console.log(datamatch.isBigInt(bigCount, { max: '3199999999999999999999999999999' })); // false
+console.log(Datamatch.isBigInt(bigCount, { max: '3200000000000000000000000000000' })); // true
+console.log(Datamatch.isBigInt(bigCount, { max: '3199999999999999999999999999999' })); // false
 ```
 
 [back to top](#table-of-contents)
 
 ## length
 ```js
-console.log(datamatch.isNumber(9, { length: 1 })); // true
-console.log(datamatch.isNumber(9, { length: 2 })); // false
+console.log(Datamatch.isNumber(9, { length: 1 })); // true
+console.log(Datamatch.isNumber(9, { length: 2 })); // false
 
-console.log(datamatch.isBigInt(BigInt('12345'), { length: 5 })); // true
-console.log(datamatch.isBigInt(BigInt('12345'), { length: 4 })); // false
+console.log(Datamatch.isBigInt(BigInt('12345'), { length: 5 })); // true
+console.log(Datamatch.isBigInt(BigInt('12345'), { length: 4 })); // false
 
-console.log(datamatch.isString('Hello', { length: 5 })); // true
-console.log(datamatch.isString('Hello', { length: 4 })); // false
-console.log(datamatch.isString('Hello', { length: 6 })); // false
+console.log(Datamatch.isString('Hello', { length: 5 })); // true
+console.log(Datamatch.isString('Hello', { length: 4 })); // false
+console.log(Datamatch.isString('Hello', { length: 6 })); // false
 
-console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { length: 5 })); // true
-console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { length: 4 })); // false
-console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { length: 6 })); // false
+console.log(Datamatch.isArray([ 1, 2, 3, 4, 5 ], { length: 5 })); // true
+console.log(Datamatch.isArray([ 1, 2, 3, 4, 5 ], { length: 4 })); // false
+console.log(Datamatch.isArray([ 1, 2, 3, 4, 5 ], { length: 6 })); // false
 ```
 
 ## minLength
 ```js
-console.log(datamatch.isNumber(9, { minLength: 1 })); // true
-console.log(datamatch.isNumber(9, { minLength: 2 })); // false
+console.log(Datamatch.isNumber(9, { minLength: 1 })); // true
+console.log(Datamatch.isNumber(9, { minLength: 2 })); // false
 
-console.log(datamatch.isBigInt(BigInt('12345'), { minLength: 5 })); // true
-console.log(datamatch.isBigInt(BigInt('12345'), { minLength: 6 })); // false
+console.log(Datamatch.isBigInt(BigInt('12345'), { minLength: 5 })); // true
+console.log(Datamatch.isBigInt(BigInt('12345'), { minLength: 6 })); // false
 
-console.log(datamatch.isString('Hello', { minLength: 5 })); // true
-console.log(datamatch.isString('Hello', { minLength: 6 })); // false
+console.log(Datamatch.isString('Hello', { minLength: 5 })); // true
+console.log(Datamatch.isString('Hello', { minLength: 6 })); // false
 
-console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { minLength: 5 })); // true
-console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { minLength: 6 })); // false
+console.log(Datamatch.isArray([ 1, 2, 3, 4, 5 ], { minLength: 5 })); // true
+console.log(Datamatch.isArray([ 1, 2, 3, 4, 5 ], { minLength: 6 })); // false
 ```
 
 [back to top](#table-of-contents)
 
 ## maxLength
 ```js
-console.log(datamatch.isNumber(9, { maxLength: 1 })); // true
-console.log(datamatch.isNumber(9, { maxLength: 0 })); // false
+console.log(Datamatch.isNumber(9, { maxLength: 1 })); // true
+console.log(Datamatch.isNumber(9, { maxLength: 0 })); // false
 
-console.log(datamatch.isBigInt(BigInt('12345'), { maxLength: 5 })); // true
-console.log(datamatch.isBigInt(BigInt('12345'), { maxLength: 4 })); // false
+console.log(Datamatch.isBigInt(BigInt('12345'), { maxLength: 5 })); // true
+console.log(Datamatch.isBigInt(BigInt('12345'), { maxLength: 4 })); // false
 
-console.log(datamatch.isString('Hello', { maxLength: 5 })); // true
-console.log(datamatch.isString('Hello', { maxLength: 4 })); // false
+console.log(Datamatch.isString('Hello', { maxLength: 5 })); // true
+console.log(Datamatch.isString('Hello', { maxLength: 4 })); // false
 
-console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { maxLength: 5 })); // true
-console.log(datamatch.isArray([ 1, 2, 3, 4, 5 ], { maxLength: 4 })); // false
+console.log(Datamatch.isArray([ 1, 2, 3, 4, 5 ], { maxLength: 5 })); // true
+console.log(Datamatch.isArray([ 1, 2, 3, 4, 5 ], { maxLength: 4 })); // false
 ```
 
 [back to top](#table-of-contents)
 
 ## values
 ```js
-console.log(datamatch.isNumber(77, { values: [ 53, 77, 99 ] })); // true
-console.log(datamatch.isNumber(77, { values: [ 53, 99 ] })); // false
+console.log(Datamatch.isNumber(77, { values: [ 53, 77, 99 ] })); // true
+console.log(Datamatch.isNumber(77, { values: [ 53, 99 ] })); // false
 
-console.log(datamatch.isBigInt(BigInt('77'), { values: [ BigInt('77'), BigInt('99') ] })); // true
-console.log(datamatch.isBigInt(BigInt('77'), { values: [ BigInt('99') ] })); // false
+console.log(Datamatch.isBigInt(BigInt('77'), { values: [ BigInt('77'), BigInt('99') ] })); // true
+console.log(Datamatch.isBigInt(BigInt('77'), { values: [ BigInt('99') ] })); // false
 
-console.log(datamatch.isString('Hello', { values: [ 'Hello', 'Bye' ] })); // true
-console.log(datamatch.isString('Hello', { values: [ 'Bye' ] })); // false
+console.log(Datamatch.isString('Hello', { values: [ 'Hello', 'Bye' ] })); // true
+console.log(Datamatch.isString('Hello', { values: [ 'Bye' ] })); // false
 ```
 
 [back to top](#table-of-contents)
@@ -456,17 +539,17 @@ console.log(datamatch.isString('Hello', { values: [ 'Bye' ] })); // false
 ## isDate (option)
 If string value is date (true), you can safely use 'new Date(value)' without fear of errors.
 ```js
-console.log(datamatch.isString('Thu, 31 Oct 2024 07:28:00 GMT', { isDate: true })); // true
-console.log(datamatch.isString('Thu, 32 Oct 2024 07:28:00 GMT', { isDate: true })); // false
+console.log(Datamatch.isString('Thu, 31 Oct 2024 07:28:00 GMT', { isDate: true })); // true
+console.log(Datamatch.isString('Thu, 32 Oct 2024 07:28:00 GMT', { isDate: true })); // false
 ```
 
 [back to top](#table-of-contents)
 
 ## isDomain
 ```js
-console.log(datamatch.isString('www.example.com', { isDomain: true })); // true
-console.log(datamatch.isString('example.com', { isDomain: true })); // true
-console.log(datamatch.isString('example@.com', { isDomain: true })); // false
+console.log(Datamatch.isString('www.example.com', { isDomain: true })); // true
+console.log(Datamatch.isString('example.com', { isDomain: true })); // true
+console.log(Datamatch.isString('example@.com', { isDomain: true })); // false
 ```
 
 [back to top](#table-of-contents)
@@ -474,9 +557,9 @@ console.log(datamatch.isString('example@.com', { isDomain: true })); // false
 ## isUrl
 If string value is url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
-console.log(datamatch.isString('https://www.example.com', { isUrl: true })); // true
-console.log(datamatch.isString('https://example.com', { isUrl: true })); // true
-console.log(datamatch.isString('example.com', { isUrl: true })); // false
+console.log(Datamatch.isString('https://www.example.com', { isUrl: true })); // true
+console.log(Datamatch.isString('https://example.com', { isUrl: true })); // true
+console.log(Datamatch.isString('example.com', { isUrl: true })); // false
 ```
 
 [back to top](#table-of-contents)
@@ -484,9 +567,9 @@ console.log(datamatch.isString('example.com', { isUrl: true })); // false
 ## isHTTPUrl
 If string value is HTTP url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
-console.log(datamatch.isString('http://www.example.com', { isHTTPUrl: true })); // true
-console.log(datamatch.isString('http://example.com', { isHTTPUrl: true })); // true
-console.log(datamatch.isString('https://example.com', { isHTTPUrl: true })); // false
+console.log(Datamatch.isString('http://www.example.com', { isHTTPUrl: true })); // true
+console.log(Datamatch.isString('http://example.com', { isHTTPUrl: true })); // true
+console.log(Datamatch.isString('https://example.com', { isHTTPUrl: true })); // false
 ```
 
 [back to top](#table-of-contents)
@@ -494,9 +577,9 @@ console.log(datamatch.isString('https://example.com', { isHTTPUrl: true })); // 
 ## isHTTPSUrl
 If string value is HTTPS url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
-console.log(datamatch.isString('https://www.example.com', { isHTTPSUrl: true })); // true
-console.log(datamatch.isString('https://example.com', { isHTTPSUrl: true })); // true
-console.log(datamatch.isString('http://example.com', { isHTTPSUrl: true })); // false
+console.log(Datamatch.isString('https://www.example.com', { isHTTPSUrl: true })); // true
+console.log(Datamatch.isString('https://example.com', { isHTTPSUrl: true })); // true
+console.log(Datamatch.isString('http://example.com', { isHTTPSUrl: true })); // false
 ```
 
 [back to top](#table-of-contents)
@@ -504,9 +587,9 @@ console.log(datamatch.isString('http://example.com', { isHTTPSUrl: true })); // 
 ## isWSUrl
 If string value is WS url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
-console.log(datamatch.isString('ws://www.example.com', { isWSUrl: true })); // true
-console.log(datamatch.isString('ws://example.com', { isWSUrl: true })); // true
-console.log(datamatch.isString('wss://example.com', { isWSUrl: true })); // false
+console.log(Datamatch.isString('ws://www.example.com', { isWSUrl: true })); // true
+console.log(Datamatch.isString('ws://example.com', { isWSUrl: true })); // true
+console.log(Datamatch.isString('wss://example.com', { isWSUrl: true })); // false
 ```
 
 [back to top](#table-of-contents)
@@ -514,36 +597,44 @@ console.log(datamatch.isString('wss://example.com', { isWSUrl: true })); // fals
 ## isWSSUrl
 If string value is WSS url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
-console.log(datamatch.isString('wss://www.example.com', { isWSSUrl: true })); // true
-console.log(datamatch.isString('wss://example.com', { isWSSUrl: true })); // true
-console.log(datamatch.isString('ws://example.com', { isWSSUrl: true })); // false
+console.log(Datamatch.isString('wss://www.example.com', { isWSSUrl: true })); // true
+console.log(Datamatch.isString('wss://example.com', { isWSSUrl: true })); // true
+console.log(Datamatch.isString('ws://example.com', { isWSSUrl: true })); // false
 ```
 
 [back to top](#table-of-contents)
 
 ## isIP
 ```js
-console.log(datamatch.isString('192.168.0.1', { isIP: true })); // true
-console.log(datamatch.isString('2001:0db8:85a3:0000:0000:8a2e:0370:7334', { isIP: true })); // true
-console.log(datamatch.isString('192.168.0.256', { isIP: true })); // false
+console.log(Datamatch.isString('192.168.0.1', { isIP: true })); // true
+console.log(Datamatch.isString('2001:0db8:85a3:0000:0000:8a2e:0370:7334', { isIP: true })); // true
+console.log(Datamatch.isString('192.168.0.256', { isIP: true })); // false
 ```
 
 [back to top](#table-of-contents)
 
 ## isIPv4
 ```js
-console.log(datamatch.isString('192.168.0.1', { isIPv4: true })); // true
-console.log(datamatch.isString('2001:0db8:85a3:0000:0000:8a2e:0370:7334', { isIPv4: true })); // false
-console.log(datamatch.isString('192.168.0.256', { isIPv4: true })); // false
+console.log(Datamatch.isString('192.168.0.1', { isIPv4: true })); // true
+console.log(Datamatch.isString('2001:0db8:85a3:0000:0000:8a2e:0370:7334', { isIPv4: true })); // false
+console.log(Datamatch.isString('192.168.0.256', { isIPv4: true })); // false
 ```
 
 [back to top](#table-of-contents)
 
 ## isIPv6
 ```js
-console.log(datamatch.isString('2001:0db8:85a3:0000:0000:8a2e:0370:7334', { isIPv6: true })); // true
-console.log(datamatch.isString('192.168.0.1', { isIPv6: true })); // false
-console.log(datamatch.isString('192.168.0.256', { isIPv6: true })); // false
+console.log(Datamatch.isString('2001:0db8:85a3:0000:0000:8a2e:0370:7334', { isIPv6: true })); // true
+console.log(Datamatch.isString('192.168.0.1', { isIPv6: true })); // false
+console.log(Datamatch.isString('192.168.0.256', { isIPv6: true })); // false
+```
+
+[back to top](#table-of-contents)
+
+## isJSON
+```js
+console.log(Datamatch.isString('{"login":"john"}', { isJSON: true })); // true
+console.log(Datamatch.isString('{"login":"john', { isJSON: true })); // false
 ```
 
 [back to top](#table-of-contents)
@@ -551,13 +642,13 @@ console.log(datamatch.isString('192.168.0.256', { isIPv6: true })); // false
 ## isFloat
 If string value is float (true), you can safely use 'parseFloat(value)' without fear of errors.
 ```js
-console.log(datamatch.isNumber(0.34, { isFloat: true })); // true
-console.log(datamatch.isNumber(2, { isFloat: true })); // false
+console.log(Datamatch.isNumber(0.34, { isFloat: true })); // true
+console.log(Datamatch.isNumber(2, { isFloat: true })); // false
 
-console.log(datamatch.isString('0.34', { isFloat: true })); // true
-console.log(datamatch.isString('00.34', { isFloat: true })); // false
-console.log(datamatch.isString('0,34', { isFloat: true })); // false
-console.log(datamatch.isString('2', { isFloat: true })); // false
+console.log(Datamatch.isString('0.34', { isFloat: true })); // true
+console.log(Datamatch.isString('00.34', { isFloat: true })); // false
+console.log(Datamatch.isString('0,34', { isFloat: true })); // false
+console.log(Datamatch.isString('2', { isFloat: true })); // false
 ```
 
 [back to top](#table-of-contents)
@@ -565,14 +656,14 @@ console.log(datamatch.isString('2', { isFloat: true })); // false
 ## isInt
 If string value is int (true), you can safely use 'parseInt(value)' without fear of errors.
 ```js
-console.log(datamatch.isNumber(2, { isInt: true })); // true
-console.log(datamatch.isNumber(0.34, { isInt: true })); // false
+console.log(Datamatch.isNumber(2, { isInt: true })); // true
+console.log(Datamatch.isNumber(0.34, { isInt: true })); // false
 
-console.log(datamatch.isString('2', { isInt: true })); // true
-console.log(datamatch.isString('02', { isInt: true })); // true
-console.log(datamatch.isString('0.34', { isInt: true })); // false
-console.log(datamatch.isString('0,34', { isInt: true })); // false
-console.log(datamatch.isString('00.34', { isInt: true })); // false
+console.log(Datamatch.isString('2', { isInt: true })); // true
+console.log(Datamatch.isString('02', { isInt: true })); // true
+console.log(Datamatch.isString('0.34', { isInt: true })); // false
+console.log(Datamatch.isString('0,34', { isInt: true })); // false
+console.log(Datamatch.isString('00.34', { isInt: true })); // false
 ```
 
 [back to top](#table-of-contents)
@@ -580,16 +671,16 @@ console.log(datamatch.isString('00.34', { isInt: true })); // false
 ## isNumeric
 Contains 'isFloat' + 'isInt' logic.
 ```js
-console.log(datamatch.isNumber(2, { isNumeric: true })); // true
-console.log(datamatch.isNumber(0.34, { isNumeric: true })); // true
-console.log(datamatch.isNumber(NaN, { isNumeric: true })); // false
+console.log(Datamatch.isNumber(2, { isNumeric: true })); // true
+console.log(Datamatch.isNumber(0.34, { isNumeric: true })); // true
+console.log(Datamatch.isNumber(NaN, { isNumeric: true })); // false
 
-console.log(datamatch.isString('2', { isNumeric: true })); // true
-console.log(datamatch.isString('02', { isNumeric: true })); // true
-console.log(datamatch.isString('0.34', { isNumeric: true })); // true
-console.log(datamatch.isString('0,34', { isNumeric: true })); // false
-console.log(datamatch.isString('00.34', { isNumeric: true })); // false
-console.log(datamatch.isString('NaN', { isNumeric: true })); // false
+console.log(Datamatch.isString('2', { isNumeric: true })); // true
+console.log(Datamatch.isString('02', { isNumeric: true })); // true
+console.log(Datamatch.isString('0.34', { isNumeric: true })); // true
+console.log(Datamatch.isString('0,34', { isNumeric: true })); // false
+console.log(Datamatch.isString('00.34', { isNumeric: true })); // false
+console.log(Datamatch.isString('NaN', { isNumeric: true })); // false
 ```
 
 [back to top](#table-of-contents)
