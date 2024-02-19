@@ -157,10 +157,10 @@ const run = Datamatch.init()
     .field('two').isNumber()
     .field('three').isObject()
         .field('four').isString()
-    .end()
+        .end()
     .field('five').isObject()
         .field('six').isArray().isString().isNumber().end()
-    .end()
+        .end()
     .check(obj);
 
 if (run.errors) {
@@ -172,7 +172,7 @@ if (run.errors) {
 // Returns: true
 ```
 
-IMPORTANT: Always use '.end()' to close .isObject()... .end() and .isArray()... .end() constructions.
+IMPORTANT: Always use '.end()' to close .isObject() and .isArray() constructions.
 
 [back to top](#table-of-contents)
 
@@ -191,10 +191,10 @@ const run = Datamatch.init()
     .field('two').isNumber()
     .field('three').isObject()
         .field('four').isString()
-    .end()
+        .end()
     .field('five').isObject()
         .field('six').isArray().isString().isNumber({ max: 122 }).end()
-    .end()
+        .end()
     .check(obj);
 
 if (run.errors) {
@@ -206,7 +206,7 @@ if (run.errors) {
 // Returns: [ "Array element in field 'five.six' must be more than '122'. '123' given." ]
 ```
 
-IMPORTANT: Always use '.end()' to close .isObject()... .end() and .isArray()... .end() constructions.
+IMPORTANT: Always use '.end()' to close .isObject() and .isArray() constructions.
 
 [back to top](#table-of-contents)
 
