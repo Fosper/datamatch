@@ -2,63 +2,45 @@
 
 import options from './options'
 
-export default class {
+class Datamatch {
     constructor() {
         this.currentPath = ``
         this.fields = []
         this.errors = null
+        this.constructor.types.forEach(type => {
+            this[`is${type}`] = (opt = {}) => this.sysAddRule(type, opt)
+        })
     }
 
-    static isUndefined = (...opt) => this.sysCheck(`Undefined`, opt)
-    static isNull = (...opt) => this.sysCheck(`Null`, opt)
-    static isBoolean = (...opt) => this.sysCheck(`Boolean`, opt)
-    static isNumber = (...opt) => this.sysCheck(`Number`, opt)
-    static isBigInt = (...opt) => this.sysCheck(`BigInt`, opt)
-    static isString = (...opt) => this.sysCheck(`String`, opt)
-    static isArray = (...opt) => this.sysCheck(`Array`, opt)
-    static isObject = (...opt) => this.sysCheck(`Object`, opt)
-    static isFunction = (...opt) => this.sysCheck(`Function`, opt)
-    static isAsyncFunction = (...opt) => this.sysCheck(`AsyncFunction`, opt)
-    static isPromise = (...opt) => this.sysCheck(`Promise`, opt)
-    static isSymbol = (...opt) => this.sysCheck(`Symbol`, opt)
-    static isArrayBuffer = (...opt) => this.sysCheck(`ArrayBuffer`, opt)
-    static isSet = (...opt) => this.sysCheck(`Set`, opt)
-    static isMap = (...opt) => this.sysCheck(`Map`, opt)
-    static isDate = (...opt) => this.sysCheck(`Date`, opt)
-    static isRegExp = (...opt) => this.sysCheck(`RegExp`, opt)
-    static isDataView = (...opt) => this.sysCheck(`DataView`, opt)
-    static isInt8Array = (...opt) => this.sysCheck(`Int8Array`, opt)
-    static isInt16Array = (...opt) => this.sysCheck(`Int16Array`, opt)
-    static isInt32Array = (...opt) => this.sysCheck(`Int32Array`, opt)
-    static isUint8Array = (...opt) => this.sysCheck(`Uint8Array`, opt)
-    static isUint16Array = (...opt) => this.sysCheck(`Uint16Array`, opt)
-    static isUint32Array = (...opt) => this.sysCheck(`Uint32Array`, opt)
-    static isFloat32Array = (...opt) => this.sysCheck(`Float32Array`, opt)
-    static isFloat64Array = (...opt) => this.sysCheck(`Float64Array`, opt)
-    static isUint8ClampedArray = (...opt) => this.sysCheck(`Uint8ClampedArray`, opt)
-    static isSharedArrayBuffer = (...opt) => this.sysCheck(`SharedArrayBuffer`, opt)
+    static types = [`Undefined`, `Null`, `Boolean`, `Number`, `BigInt`, `String`, `Array`, `Object`, `Function`, `AsyncFunction`, `Promise`, `Symbol`, `ArrayBuffer`, `Set`, `Map`, `Date`, `RegExp`, `DataView`, `Int8Array`, `Int16Array`, `Int32Array`, `Uint8Array`, `Uint16Array`, `Uint32Array`, `Float32Array`, `Float64Array`, `Uint8ClampedArray`, `SharedArrayBuffer`]
 
     static init = () => { return new this() }
 
     field = (fieldName) => {
-        if (!this.currentPath.includes(`.`)) {
-            this.currentPath = `${fieldName}`
+        if (this.currentPath) {
+            const lastIndex = this.currentPath.lastIndexOf(`.`)
+            if (lastIndex !== -1) {
+                this.currentPath = `${this.currentPath.substring(0, lastIndex + 1)}${fieldName}`
+            } else {
+                this.currentPath = fieldName
+            }
         } else {
-            this.currentPath = `${this.currentPath.split(`.`).slice(0, -1).join(`.`)}.${fieldName}`
+            this.currentPath = fieldName
         }
         this.sysAddRule(`Any`)
         return this
     }
 
     end = () => {
+        const pathParts = this.currentPath.split(`.`)
         if (this.currentPath.at(-1) !== `.`) {
             if (!this.fields.at(-1).takeRule) {
-                this.currentPath = this.currentPath.split(`.`).slice(0, -1).join(`.`)
+                this.currentPath = pathParts.slice(0, -1).join(`.`)
             } else {
                 this.fields.at(-1).takeRule = false
             }
         } else {
-            this.currentPath = this.currentPath.split(`.`).slice(0, -1).join(`.`)
+            this.currentPath = pathParts.slice(0, -1).join(`.`)
             this.sysAddRule(`Object`)
         }
         return this
@@ -66,140 +48,117 @@ export default class {
 
     check = (obj, strict = false) => {
         this.errors = []
-
+    
         const objType = this.constructor.sysGetType(obj)
-        if (objType !== `Object`) {
+        if (objType !== 'Object') {
             this.errors.push(`Data must be type of 'Object'. '${objType}' given.`)
             return this
         }
-
+    
         const arr = this.sysObjectToArray(obj)
-
-        const canBeSkipped = []
-        for (const field of this.fields) {
-            if (field.rules[0].type === `Undefined` && !canBeSkipped.includes(field.path)) {
-                canBeSkipped.push(field.path)
-            }
+        const canBeSkipped = new Set()
+        const checked = new Set()
+    
+        for (let i = 0, length = this.fields.length; i < length; i++) {
+            const field = this.fields[i]
+            if (field.rules[0].type === 'Undefined') canBeSkipped.add(field.path)
         }
-
-        const checked = []
-        for (const field of this.fields) {
-            if (checked.includes(field)) continue
-            checked.push(field.path)
-
-            let isSet = false
-            for (const elem of arr) {
-                if (elem.path.slice(0, field.path.length) === field.path) {
-                    isSet = true
-                    break
-                }
-            }
-
-            if (!isSet && !canBeSkipped.includes(field.path)) {
+    
+        for (let i = 0, length = this.fields.length; i < length; i++) {
+            const field = this.fields[i]
+            if (checked.has(field.path)) continue
+            checked.add(field.path)
+    
+            let isSet = arr.some(elem => elem.path.startsWith(field.path))
+            if (!isSet && !canBeSkipped.has(field.path)) {
                 let error = `Field '${field.path}' must be set. 'Undefined' given.`
                 if (!this.errors.includes(error)) this.errors.push(error)
             }
         }
-
-        for (const elem of arr) {
-            const fields = this.sysGetFieldsByPath(elem.path)
-            if (fields.length) {
-                this.sysValidate(elem, fields)
-            } else if (strict) {
-                this.errors.push(`Unexpected field '${elem.path}'.`)
-            }
+    
+        if (strict) {
+            arr.forEach(elem => {
+                const fields = this.sysGetFieldsByPath(elem.path)
+                if (!fields.length) this.errors.push(`Unexpected field '${elem.path}'.`)
+                else this.sysValidate(elem, fields)
+            })
+        } else {
+            arr.forEach(elem => {
+                const fields = this.sysGetFieldsByPath(elem.path)
+                if (fields.length) this.sysValidate(elem, fields)
+            })
         }
-
+    
         if (!this.errors.length) this.errors = null
         this.fields = []
-        this.currentPath = ``
+        this.currentPath = ''
         return this
     }
-
-    isObject = () => { this.currentPath += `.`; return this }
-    isUndefined = (opt = {}) => { return this.sysAddRule(`Undefined`, opt) }
-    isNull = (opt = {}) => { return this.sysAddRule(`Null`, opt) }
-    isBoolean = (opt = {}) => { return this.sysAddRule(`Boolean`, opt) }
-    isNumber = (opt = {}) => { return this.sysAddRule(`Number`, opt) }
-    isBigInt = (opt = {}) => { return this.sysAddRule(`BigInt`, opt) }
-    isString = (opt = {}) => { return this.sysAddRule(`String`, opt) }
-    isArray = (opt = {}) => { return this.sysAddRule(`Array`, opt) }
-    isFunction = (opt = {}) => { return this.sysAddRule(`Function`, opt) }
-    isAsyncFunction = (opt = {}) => { return this.sysAddRule(`AsyncFunction`, opt) }
-    isPromise = (opt = {}) => { return this.sysAddRule(`Promise`, opt) }
-    isSymbol = (opt = {}) => { return this.sysAddRule(`Symbol`, opt) }
-    isArrayBuffer = (opt = {}) => { return this.sysAddRule(`ArrayBuffer`, opt) }
-    isSet = (opt = {}) => { return this.sysAddRule(`Set`, opt) }
-    isMap = (opt = {}) => { return this.sysAddRule(`Map`, opt) }
-    isDate = (opt = {}) => { return this.sysAddRule(`Date`, opt) }
-    isRegExp = (opt = {}) => { return this.sysAddRule(`RegExp`, opt) }
-    isDataView = (opt = {}) => { return this.sysAddRule(`DataView`, opt) }
-    isInt8Array = (opt = {}) => { return this.sysAddRule(`Int8Array`, opt) }
-    isInt16Array = (opt = {}) => { return this.sysAddRule(`Int16Array`, opt) }
-    isInt32Array = (opt = {}) => { return this.sysAddRule(`Int32Array`, opt) }
-    isUint8Array = (opt = {}) => { return this.sysAddRule(`Uint8Array`, opt) }
-    isUint16Array = (opt = {}) => { return this.sysAddRule(`Uint16Array`, opt) }
-    isUint32Array = (opt = {}) => { return this.sysAddRule(`Uint32Array`, opt) }
-    isFloat32Array = (opt = {}) => { return this.sysAddRule(`Float32Array`, opt) }
-    isFloat64Array = (opt = {}) => { return this.sysAddRule(`Float64Array`, opt) }
-    isUint8ClampedArray = (opt = {}) => { return this.sysAddRule(`Uint8ClampedArray`, opt) }
-    isSharedArrayBuffer = (opt = {}) => { return this.sysAddRule(`SharedArrayBuffer`, opt) }
 
     /**
      * System, not for use:
     */
 
-     static sysCheck = (type, opt) => {
+    static sysGetType = (value) => Object.prototype.toString.call(value).replace(`[object `, ``).replace(`]`, ``)
+
+    static sysCheck = (type, opt) => {
         const valueType = this.sysGetType(opt[0])
         if (type !== valueType) return false
-        if (opt[1] && this.sysGetType(opt[1]) === 'Object') {
-            for (const [optionName, optionValue] of Object.entries(opt[1])) {
-                if (options.check(optionName, optionValue, this.sysGetType(optionValue), 'root', valueType, opt[0]).length) return false
+    
+        if (opt[1]) {
+            const secondArgType = this.sysGetType(opt[1])
+            if (secondArgType === `Object`) {
+                for (const [optionName, optionValue] of Object.entries(opt[1])) {
+                    const optionValueType = this.sysGetType(optionValue)
+                    if (options.check(optionName, optionValue, optionValueType, `root`, valueType, opt[0]).length) {
+                        return false
+                    }
+                }
             }
         }
-
+    
         return true
     }
 
-    static sysGetType = (value) => Object.prototype.toString.call(value).replace(`[object `, ``).replace(`]`, ``)
+
+    sysGetFieldsByPath = (path) => this.fields.filter(field => field.path === path)
 
     sysAddRule = (type, options = {}) => {
+        if (type === `Object`) {
+            this.currentPath += `.`
+            return this
+        }
+
+        const newRule = { type, options }
+        const takeRule = type === `Array`
+    
         if (this.fields.length) {
             let lastField = this.fields.at(-1)
             if (lastField.takeRule) {
-                lastField.rules.push({ type, options })
+                lastField.rules.push(newRule)
             } else if (lastField.rules[0].type === `Any` && lastField.path === this.currentPath) {
-                lastField.rules[0] = { type, options }
-                lastField.takeRule = type === `Array`
+                lastField.rules[0] = newRule
+                lastField.takeRule = takeRule
             } else {
-                this.fields.push({ path: `${this.currentPath}`, rules: [{ type, options }], takeRule: type === `Array` })
+                this.fields.push({ path: this.currentPath, rules: [newRule], takeRule })
             }
         } else {
-            this.fields.push({ path: `${this.currentPath}`, rules: [{ type, options }], takeRule: type === `Array` })
+            this.fields.push({ path: this.currentPath, rules: [newRule], takeRule })
         }
-
+    
         return this
     }
 
-    sysGetFieldsByPath = (path) => {
-        const result = []
-        for (const field of this.fields) {
-            if (field.path === path) result.push(field)
-        }
 
-        return result
-    }
-
-    sysObjectToArray = (obj, parentPath = ``) => {
+    sysObjectToArray = (obj, parentPath = '') => {
         let result = []
         for (const [key, value] of Object.entries(obj)) {
             const path = parentPath ? `${parentPath}.${key}` : key
             const type = this.constructor.sysGetType(value)
-            if (type === `Object`) {
-                if (!Object.keys(value).length) {
-                    result.push({ path, type, value: {} })
-                } else {
-                    result = result.concat(this.sysObjectToArray(value, path))
+            if (type === 'Object') {
+                result.push({ path, type, value: Object.keys(value).length ? undefined : {} })
+                if (Object.keys(value).length) {
+                    result = [...result, ...this.sysObjectToArray(value, path)]
                 }
             } else {
                 result.push({ path, type, value })
@@ -219,14 +178,6 @@ export default class {
             if (elem.type === field.rules[0].type) {
                 validType = true
                 const { type, options: fieldOptions } = field.rules[0]
-                const checkOptions = (incomeOptions, path, valueType, value, isArray = false) => {
-                    let error = ``
-                    for (const [optionName, optionValue] of Object.entries(incomeOptions)) {
-                        const checkResult = options.check(optionName, optionValue, this.constructor.sysGetType(optionValue), path, valueType, value, isArray)
-                        if (checkResult.length) error += `${checkResult} (OR) `
-                    }
-                    return error.slice(0, error.length - 6)
-                }
 
                 if (type === 'Array' && elem.value.length) {
                     const rules = field.rules.slice(1)
@@ -240,7 +191,7 @@ export default class {
                         } else {
                             for (const rule of rules) {
                                 if (rule.type !== valueType) continue
-                                const error = checkOptions(rule.options, elem.path, valueType, value, true)
+                                const error = this.sysCheckOptions(rule.options, elem.path, valueType, value, true)
                                 if (error) {
                                     if (!errors.includes(error)) errors.push(error)
                                     validOptions = false
@@ -249,7 +200,7 @@ export default class {
                         }
                     })
                 } else {
-                    const error = checkOptions(fieldOptions, elem.path, elem.type, elem.value)
+                    const error = this.sysCheckOptions(fieldOptions, elem.path, elem.type, elem.value)
                     if (error) {
                         errors.push(error)
                         validOptions = false
@@ -263,4 +214,19 @@ export default class {
         if (!validType) this.errors.push(`Field '${elem.path}' must be type of '${availableTypes.join(`' OR '`)}'. '${elem.type}' given.`)
         if (!validOptions) this.errors.push(...errors)
     }
+
+    sysCheckOptions = (incomeOptions, path, valueType, value, isArray = false) => {
+        let error = ``
+        for (const [optionName, optionValue] of Object.entries(incomeOptions)) {
+            const checkResult = options.check(optionName, optionValue, this.constructor.sysGetType(optionValue), path, valueType, value, isArray)
+            if (checkResult.length) error += `${checkResult} (OR) `
+        }
+        return error.slice(0, error.length - 6)
+    }
 }
+
+Datamatch.types.forEach(type => {
+    Datamatch[`is${type}`] = (...opt) => Datamatch.sysCheck(type, opt)
+})
+
+export default Datamatch

@@ -234,7 +234,7 @@ if (run.errors) {
 // Returns: true
 ```
 
-Field 'login' must have minimum length 4, AND contain one of values 'john' /' alex'.
+Field 'login' must have minimum length 4, AND contain one of values 'john' / 'alex'.
 
 [back to top](#table-of-contents)
 
