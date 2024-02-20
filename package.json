@@ -1,6 +1,6 @@
 {
   "name": "datamatch",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Simple and Fast Data Validation for Node.js",
   "main": "index.js",
   "type": "module",
