@@ -61,7 +61,7 @@ class Datamatch {
     
         for (let i = 0, length = this.fields.length; i < length; i++) {
             const field = this.fields[i]
-            if (field.rules[0].type === 'Undefined') canBeSkipped.add(field.path)
+            if (field.rules[0].type === `Undefined`) canBeSkipped.add(field.path)
         }
     
         for (let i = 0, length = this.fields.length; i < length; i++) {
@@ -70,7 +70,9 @@ class Datamatch {
             checked.add(field.path)
     
             let isSet = arr.some(elem => elem.path.startsWith(field.path))
-            if (!isSet && !canBeSkipped.has(field.path)) {
+            let parentCanNotSet = this.sysIsParentCanNotSet(field.path)
+
+            if (!isSet && !canBeSkipped.has(field.path) && !parentCanNotSet) {
                 let error = `Field '${field.path}' must be set. 'Undefined' given.`
                 if (!this.errors.includes(error)) this.errors.push(error)
             }
@@ -123,10 +125,7 @@ class Datamatch {
     sysGetFieldsByPath = (path) => this.fields.filter(field => field.path === path)
 
     sysAddRule = (type, options = {}) => {
-        if (type === `Object`) {
-            this.currentPath += `.`
-            return this
-        }
+
 
         const newRule = { type, options }
         const takeRule = type === `Array`
@@ -144,6 +143,8 @@ class Datamatch {
         } else {
             this.fields.push({ path: this.currentPath, rules: [newRule], takeRule })
         }
+
+        if (type === `Object`) this.currentPath += `.`
     
         return this
     }
@@ -220,6 +221,17 @@ class Datamatch {
             if (checkResult.length) error += `${checkResult} (OR) `
         }
         return error.slice(0, error.length - 6)
+    }
+
+    sysIsParentCanNotSet = (path) => {
+        if (!path.includes(`.`)) return false
+        path = path.split(`.`).slice(0, -1).join(`.`)
+        for (const field of this.fields) {
+            if (field.path === path && field.rules[0].type === `Undefined`) {
+                return true
+            }
+        }
+        return false
     }
 }
 
