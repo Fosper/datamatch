@@ -120,7 +120,6 @@ class Datamatch {
         return true
     }
 
-
     sysGetFieldsByPath = (path) => this.fields.filter(field => field.path === path)
 
     sysAddRule = (type, options = {}) => {
@@ -148,7 +147,6 @@ class Datamatch {
     
         return this
     }
-
 
     sysObjectToArray = (obj, parentPath = '') => {
         let result = []
