@@ -67,6 +67,7 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [isIPv4](#isipv4)
     - [isIPv6](#isipv6)
     - [isJSON](#isjson)
+    - [isBase64](#isbase64)
     - [isFloat](#isfloat)
     - [isInt](#isint)
     - [isNumeric](#isnumeric)
@@ -326,6 +327,7 @@ Available options:
 [isIPv4](#isipv4)  
 [isIPv6](#isipv6)  
 [isJSON](#isjson)  
+[isBase64](#isbase64)  
 [isFloat](#isfloat)  
 [isInt](#isint)  
 [isNumeric](#isnumeric)  
@@ -635,6 +637,14 @@ console.log(Datamatch.isString('192.168.0.256', { isIPv6: true })); // false
 ```js
 console.log(Datamatch.isString('{"login":"john"}', { isJSON: true })); // true
 console.log(Datamatch.isString('{"login":"john', { isJSON: true })); // false
+```
+
+[back to top](#table-of-contents)
+
+## isBase64
+```js
+console.log(Datamatch.isString('SGVsbG8=', { isBase64: true })); // true
+console.log(Datamatch.isString('SGVs', { isBase64: true })); // false
 ```
 
 [back to top](#table-of-contents)
