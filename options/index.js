@@ -1,5 +1,6 @@
 'use strict'
 
+import isBase64 from './isBase64'
 import isDate from './isDate'
 import isDomain from './isDomain'
 import isFloat from './isFloat'
@@ -21,33 +22,37 @@ import min from './min'
 import minLength from './minLength'
 import values from './values'
 
-export default class {
-    static isDate = isDate
-    static isDomain = isDomain
-    static isFloat = isFloat
-    static isHTTPSUrl = isHTTPSUrl
-    static isHTTPUrl = isHTTPUrl
-    static isInt = isInt
-    static isIP = isIP
-    static isIPv4 = isIPv4
-    static isIPv6 = isIPv6
-    static isJSON = isJSON
-    static isNumeric = isNumeric
-    static isUrl = isUrl
-    static isWSSUrl = isWSSUrl
-    static isWSUrl = isWSUrl
-    static length = length
-    static max = max
-    static maxLength = maxLength
-    static min = min
-    static minLength = minLength
-    static values = values
+const validators = {
+    isBase64,
+    isDate,
+    isDomain,
+    isFloat,
+    isHTTPSUrl,
+    isHTTPUrl,
+    isInt,
+    isIP,
+    isIPv4,
+    isIPv6,
+    isJSON,
+    isNumeric,
+    isUrl,
+    isWSSUrl,
+    isWSUrl,
+    length,
+    max,
+    maxLength,
+    min,
+    minLength,
+    values
+}
 
+export default class {
     static check = (optionName, optionValue, optionValueType, path, type, value, inArray = false) => {
-        if (!this[optionName]) {
+        const validator = validators[optionName]
+        if (!validator) {
             return `Internal field error '${path}'. Unknown option '${optionName}'.`
         }
 
-        return this[optionName](optionName, optionValue, optionValueType, path, type, value, inArray)
+        return validator(optionName, optionValue, optionValueType, path, type, value, inArray)
     }
 }
