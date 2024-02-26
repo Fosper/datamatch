@@ -8,14 +8,8 @@ export default (optionName, optionValue, optionValueType, path, type, value, inA
     if (!availableOptionTypes.includes(optionValueType)) return `Internal field error '${path}'. Unsupported option type for option '${optionName}'.`
 
     let result = ``
-    let is = true
-    try {
-        const decodedStr = decodeURIComponent(value)
-        const regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/
-        is = regex.test(decodedStr)
-    } catch (e) {
-        is = false
-    }
+    const regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/
+    const is = regex.test(value)
 
     if (is && !optionName) {
         result = `${inArray ? `Array element in field` : `Field`} '${path}' must be not Base64.`
