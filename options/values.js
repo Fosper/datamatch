@@ -7,7 +7,7 @@ export default (optionName, optionValue, optionValueType, path, type, value, inA
 
     let result = ``
     if (!optionValue.includes(value)) {
-        result = `${inArray ? `Array element in field` : `Field`} '${path}' don't contain required values.`
+        result = `${inArray ? `Array element in field` : `Field`} '${path}' didn't contain required values.`
     }
 
     return result

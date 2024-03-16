@@ -125,8 +125,6 @@ class Datamatch {
     sysGetFieldsByPath = (path) => this.fields.filter(field => field.path === path)
 
     sysAddRule = (type, options = {}) => {
-
-
         const newRule = { type, options }
         const takeRule = type === `Array`
     
@@ -186,14 +184,14 @@ class Datamatch {
                         if (validArrayTypes.length && !validArrayTypes.includes(valueType)) {
                             const error = `Field '${elem.path}' is array, and must contain '${validArrayTypes.join(' or ')}' types. '${valueType}' given.`
                             if (!errors.includes(error)) errors.push(error)
-                            validOptions = false
                         } else {
                             for (const rule of rules) {
                                 if (rule.type !== valueType) continue
                                 const error = this.sysCheckOptions(rule.options, elem.path, valueType, value, true)
                                 if (error) {
                                     if (!errors.includes(error)) errors.push(error)
-                                    validOptions = false
+                                } else {
+                                    validOptions = true
                                 }
                             }
                         }
@@ -201,8 +199,9 @@ class Datamatch {
                 } else {
                     const error = this.sysCheckOptions(fieldOptions, elem.path, elem.type, elem.value)
                     if (error) {
-                        errors.push(error)
-                        validOptions = false
+                        if (!errors.includes(error)) errors.push(error)
+                    } else {
+                        validOptions = true
                     }
                 }
 
