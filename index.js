@@ -50,7 +50,7 @@ class Datamatch {
         this.errors = []
     
         const objType = this.constructor.sysGetType(obj)
-        if (objType !== 'Object') {
+        if (objType !== `Object`) {
             this.errors.push(`Data must be type of 'Object'. '${objType}' given.`)
             return this
         }
@@ -93,7 +93,7 @@ class Datamatch {
     
         if (!this.errors.length) this.errors = null
         this.fields = []
-        this.currentPath = ''
+        this.currentPath = ``
         return this
     }
 
@@ -147,12 +147,12 @@ class Datamatch {
         return this
     }
 
-    sysObjectToArray = (obj, parentPath = '') => {
+    sysObjectToArray = (obj, parentPath = ``) => {
         let result = []
         for (const [key, value] of Object.entries(obj)) {
             const path = parentPath ? `${parentPath}.${key}` : key
             const type = this.constructor.sysGetType(value)
-            if (type === 'Object') {
+            if (type === `Object`) {
                 result.push({ path, type, value: Object.keys(value).length ? undefined : {} })
                 if (Object.keys(value).length) {
                     result = [...result, ...this.sysObjectToArray(value, path)]
@@ -176,7 +176,7 @@ class Datamatch {
                 validType = true
                 const { type, options: fieldOptions } = field.rules[0]
 
-                if (type === 'Array' && elem.value.length) {
+                if (type === `Array` && elem.value.length) {
                     const rules = field.rules.slice(1)
                     const validArrayTypes = rules.map(rule => rule.type)
                     elem.value.forEach(value => {
