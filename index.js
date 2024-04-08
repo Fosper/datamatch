@@ -41,7 +41,7 @@ class Datamatch {
             }
         } else {
             this.currentPath = pathParts.slice(0, -1).join(`.`)
-            this.sysAddRule(`Object`)
+            if (this.currentPath.includes(`.`)) this.sysAddRule(`Object`)
         }
         return this
     }
