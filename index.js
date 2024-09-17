@@ -72,7 +72,7 @@ class Datamatch {
             let isSet = arr.some(elem => elem.path.startsWith(field.path))
             let parentCanNotSet = this.sysIsParentCanNotSet(field.path)
 
-            if (!isSet && !canBeSkipped.has(field.path) && !parentCanNotSet) {
+            if (!isSet && !canBeSkipped.has(field.path) && !parentCanNotSet && this.sysIsParentObjectOnly(field.path)) {
                 let error = `Field '${field.path}' must be set. 'Undefined' given.`
                 if (!this.errors.includes(error)) this.errors.push(error)
             }
@@ -86,6 +86,7 @@ class Datamatch {
             })
         } else {
             arr.forEach(elem => {
+                // console.log(elem)
                 const fields = this.sysGetFieldsByPath(elem.path)
                 if (fields.length) this.sysValidate(elem, fields)
             })
@@ -129,7 +130,7 @@ class Datamatch {
         const takeRule = type === `Array`
     
         if (this.fields.length) {
-            let lastField = this.fields.at(-1)
+            const lastField = this.fields.at(-1)
             if (lastField.takeRule) {
                 lastField.rules.push(newRule)
             } else if (lastField.rules[0].type === `Any` && lastField.path === this.currentPath) {
@@ -182,7 +183,7 @@ class Datamatch {
                     elem.value.forEach(value => {
                         const valueType = this.constructor.sysGetType(value)
                         if (validArrayTypes.length && !validArrayTypes.includes(valueType)) {
-                            const error = `Field '${elem.path}' is array, and must contain '${validArrayTypes.join(' or ')}' types. '${valueType}' given.`
+                            const error = `Field '${elem.path}' is array, and must contain '${validArrayTypes.join(`' or '`)}' types. '${valueType}' given.`
                             if (!errors.includes(error)) errors.push(error)
                         } else {
                             for (const rule of rules) {
@@ -231,6 +232,26 @@ class Datamatch {
             }
         }
         return false
+    }
+
+    sysGetRulesByPath = (path) => {
+        const result = []
+        for (const field of this.fields) {
+            if (field.path === path) {
+                for (const rule of field.rules) result.push(rule)
+            }
+        }
+        return result
+    }
+
+    sysIsParentObjectOnly = (path) => {
+        if (!path.includes(`.`)) return true
+        path = path.split(`.`).slice(0, -1).join(`.`)
+        const pathRules = this.sysGetRulesByPath(path)
+        for (const rule of pathRules) {
+            if (rule.type !== `Object`) return false
+        }
+        return true
     }
 }
 
