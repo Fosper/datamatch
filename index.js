@@ -86,7 +86,6 @@ class Datamatch {
             })
         } else {
             arr.forEach(elem => {
-                // console.log(elem)
                 const fields = this.sysGetFieldsByPath(elem.path)
                 if (fields.length) this.sysValidate(elem, fields)
             })
