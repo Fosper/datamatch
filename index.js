@@ -250,7 +250,11 @@ class Datamatch {
         for (const rule of pathRules) {
             if (rule.type !== `Object`) return false
         }
-        return true
+        if (path.includes(`.`)) {
+            return this.sysIsParentObjectOnly(path)
+        } else {
+            return true
+        }
     }
 }
 
