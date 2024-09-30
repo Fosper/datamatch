@@ -3,6 +3,7 @@
 import isBase64 from './isBase64'
 import isDate from './isDate'
 import isDomain from './isDomain'
+import isE164 from './isE164'
 import isFloat from './isFloat'
 import isHTTPSUrl from './isHTTPSUrl'
 import isHTTPUrl from './isHTTPUrl'
@@ -11,7 +12,9 @@ import isIP from './isIP'
 import isIPv4 from './isIPv4'
 import isIPv6 from './isIPv6'
 import isJSON from './isJSON'
+import isMd5 from './isMd5'
 import isNumeric from './isNumeric'
+import isSha256 from './isSha256'
 import isUrl from './isUrl'
 import isWSSUrl from './isWSSUrl'
 import isWSUrl from './isWSUrl'
@@ -26,6 +29,7 @@ const validators = {
     isBase64,
     isDate,
     isDomain,
+    isE164,
     isFloat,
     isHTTPSUrl,
     isHTTPUrl,
@@ -34,7 +38,9 @@ const validators = {
     isIPv4,
     isIPv6,
     isJSON,
+    isMd5,
     isNumeric,
+    isSha256,
     isUrl,
     isWSSUrl,
     isWSUrl,
