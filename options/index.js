@@ -4,6 +4,7 @@ import isBase64 from './isBase64'
 import isDate from './isDate'
 import isDomain from './isDomain'
 import isE164 from './isE164'
+import isEmail from './isEmail'
 import isFloat from './isFloat'
 import isHTTPSUrl from './isHTTPSUrl'
 import isHTTPUrl from './isHTTPUrl'
@@ -30,6 +31,7 @@ const validators = {
     isDate,
     isDomain,
     isE164,
+    isEmail,
     isFloat,
     isHTTPSUrl,
     isHTTPUrl,

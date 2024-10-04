@@ -35,7 +35,10 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [isSymbol](#issymbol)
     - [isArrayBuffer](#isarraybuffer)
     - [isSet](#isset)
+    - [isWeakSet](#isweakset)
     - [isMap](#ismap)
+    - [isWeakMap](#isweakmap)
+    - [isWeakRef](#isweakref)
     - [isDate](#isdate)
     - [isRegExp](#isregexp)
     - [isDataView](#isdataview)
@@ -49,28 +52,35 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [isFloat64Array](#isfloat64array)
     - [isUint8ClampedArray](#isuint8clampedarray)
     - [isSharedArrayBuffer](#issharedarraybuffer)
+    - [isFinalizationRegistry](#isfinalizationregistry)
+    - [isAbortController](#isabortcontroller)
 - [OPTIONS](#options)
-    - [min](#min)
-    - [max](#max)
-    - [length](#length)
-    - [minLength](#minlength)
-    - [maxLength](#maxlength)
-    - [values](#values)
+    - [isBase64](#isbase64)
     - [isDate](#isdate-option)
     - [isDomain](#isdomain)
-    - [isUrl](#isurl)
-    - [isHTTPUrl](#ishttpUrl)
+    - [isE164](#ise164)
+    - [isEmail](#isemail)
+    - [isFloat](#isfloat)
     - [isHTTPSUrl](#ishttpsUrl)
-    - [isWSUrl](#iswsUrl)
-    - [isWSSUrl](#iswssUrl)
+    - [isHTTPUrl](#ishttpUrl)
+    - [isInt](#isint)
     - [isIP](#isip)
     - [isIPv4](#isipv4)
     - [isIPv6](#isipv6)
     - [isJSON](#isjson)
-    - [isBase64](#isbase64)
-    - [isFloat](#isfloat)
-    - [isInt](#isint)
+    - [isMd5](#ismd5)
     - [isNumeric](#isnumeric)
+    - [isSha256](#issha256)
+    - [isUrl](#isurl)
+    - [isWSSUrl](#iswssUrl)
+    - [isWSUrl](#iswsUrl)
+    - [length](#length)
+    - [max](#max)
+    - [maxLength](#maxlength)
+    - [min](#min)
+    - [minLength](#minlength)
+    - [values](#values)
+
 - [License](#license)
 
 # Installation
@@ -312,25 +322,29 @@ Available options:
 
 ## isString
 Available options:  
-[minLength](#length)  
-[minLength](#minlength)  
-[maxLength](#maxlength)  
-[values](#values)  
+[isBase64](#isbase64)  
 [isDate](#isdate-option)  
 [isDomain](#isdomain)  
-[isUrl](#isurl)  
-[isHTTPUrl](#ishttpUrl)  
-[isHTTPSUrl](#ishttpsUrl)  
-[isWSUrl](#iswsUrl)  
-[isWSSUrl](#iswssUrl)  
-[isIP](#isip)  
-[isIPv4](#isipv4)  
-[isIPv6](#isipv6)  
-[isJSON](#isjson)  
-[isBase64](#isbase64)  
+[isE164](#ise164)  
+[isEmail](#isemail)  
 [isFloat](#isfloat)  
+[isHTTPSUrl](#ishttpsUrl)  
+[isHTTPUrl](#ishttpUrl)  
 [isInt](#isint)  
+[isIP](#isip)  
+[isIPv6](#isipv6)  
+[isIPv4](#isipv4)  
+[isJSON](#isjson)  
+[isMd5](#ismd5)  
 [isNumeric](#isnumeric)  
+[isSha256](#issha256)  
+[isUrl](#isurl)  
+[isWSSUrl](#iswssUrl)  
+[isWSUrl](#iswsUrl)  
+[length](#length)  
+[maxLength](#maxlength)  
+[minLength](#minlength)  
+[values](#values)  
 
 [back to top](#table-of-contents)
 
@@ -377,7 +391,22 @@ Available options: no.
 
 [back to top](#table-of-contents)
 
+## isWeakSet
+Available options: no.
+
+[back to top](#table-of-contents)
+
 ## isMap
+Available options: no.
+
+[back to top](#table-of-contents)
+
+## isWeakMap
+Available options: no.
+
+[back to top](#table-of-contents)
+
+## isWeakRef
 Available options: no.
 
 [back to top](#table-of-contents)
@@ -443,6 +472,16 @@ Available options: no.
 [back to top](#table-of-contents)
 
 ## isSharedArrayBuffer
+Available options: no.
+
+[back to top](#table-of-contents)
+
+## isFinalizationRegistry
+Available options: no.
+
+[back to top](#table-of-contents)
+
+## isAbortController
 Available options: no.
 
 [back to top](#table-of-contents)
@@ -556,6 +595,22 @@ console.log(Datamatch.isString('example@.com', { isDomain: true })); // false
 
 [back to top](#table-of-contents)
 
+## isE164
+```js
+console.log(Datamatch.isString('+74923341293', { isE164: true })); // true
+console.log(Datamatch.isString('84923341293', { isE164: true })); // false
+```
+
+[back to top](#table-of-contents)
+
+## isEmail
+```js
+console.log(Datamatch.isString('example@mysite.com', { isEmail: true })); // true
+console.log(Datamatch.isString('example@.com', { isEmail: true })); // false
+```
+
+[back to top](#table-of-contents)
+
 ## isUrl
 If string value is url (true), you can safely use '...new URL(value)...' without fear of errors.
 ```js
@@ -641,6 +696,14 @@ console.log(Datamatch.isString('{"login":"john', { isJSON: true })); // false
 
 [back to top](#table-of-contents)
 
+## isMd5
+```js
+console.log(Datamatch.isString('42a718d6317dad85d3ea6ef6389d7db0', { isMd5: true })); // true
+console.log(Datamatch.isString('42a718d6317dad85d3ea6ef6389d7db', { isMd5: true })); // false
+```
+
+[back to top](#table-of-contents)
+
 ## isBase64
 ```js
 console.log(Datamatch.isString('SGVsbG8=', { isBase64: true })); // true
@@ -691,6 +754,14 @@ console.log(Datamatch.isString('0.34', { isNumeric: true })); // true
 console.log(Datamatch.isString('0,34', { isNumeric: true })); // false
 console.log(Datamatch.isString('00.34', { isNumeric: true })); // false
 console.log(Datamatch.isString('NaN', { isNumeric: true })); // false
+```
+
+[back to top](#table-of-contents)
+
+## isSha256
+```js
+console.log(Datamatch.isString('0d2ddeef0b9f2fb02a3563aea38b059a0d2ddeef0b9f2fb02a3563aea38b059a', { isSha256: true })); // true
+console.log(Datamatch.isString('0d2ddeef0b9f2fb02a3563aea38b059a0d2ddeef0b9f2fb02a3563aea38b059', { isSha256: true })); // false
 ```
 
 [back to top](#table-of-contents)

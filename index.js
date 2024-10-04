@@ -12,7 +12,7 @@ class Datamatch {
         })
     }
 
-    static types = [ `Undefined`, `Null`, `Boolean`, `Number`, `BigInt`, `String`, `Array`, `Object`, `Function`, `AsyncFunction`, `Promise`, `Symbol`, `ArrayBuffer`, `Set`, `Map`, `Date`, `RegExp`, `DataView`, `Int8Array`, `Int16Array`, `Int32Array`, `Uint8Array`, `Uint16Array`, `Uint32Array`, `Float32Array`, `Float64Array`, `Uint8ClampedArray`, `SharedArrayBuffer` ]
+    static types = [ `Undefined`, `Null`, `Boolean`, `Number`, `BigInt`, `String`, `Array`, `Object`, `Function`, `AsyncFunction`, `Promise`, `Symbol`, `ArrayBuffer`, `Set`, `WeakSet`, `Map`, `WeakMap`, `WeakRef`, `Date`, `RegExp`, `DataView`, `Int8Array`, `Int16Array`, `Int32Array`, `Uint8Array`, `Uint16Array`, `Uint32Array`, `Float32Array`, `Float64Array`, `Uint8ClampedArray`, `SharedArrayBuffer`, `FinalizationRegistry`, `AbortController` ]
 
     static init = () => new this()
 
