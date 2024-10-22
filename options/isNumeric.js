@@ -1,13 +1,20 @@
 'use strict'
 
 export default (optionName, optionValue, optionValueType, path, type, value, inArray) => {
+    const end = (customOptions = {}) => {
+        const options = { code: `OPTION`, field: path, name: optionName, expect: optionValue, given: null, message: null, ...customOptions }
+        return options
+    }
+
     const availableValueTypes = [ `Number`, `String` ]
-    if (!availableValueTypes.includes(type)) return `Internal field error '${path}'. Unsupported option '${optionName}'.`
+    if (!availableValueTypes.includes(type)) return end({ message: `Internal field error '${path}'. Unsupported option '${optionName}'.` })
 
     const availableOptionTypes = [ `Boolean` ]
-    if (!availableOptionTypes.includes(optionValueType)) return `Internal field error '${path}'. Unsupported option type for option '${optionName}'.`
+    if (!availableOptionTypes.includes(optionValueType)) return end({ message: `Internal field error '${path}'. Unsupported option type for option '${optionName}'.` })
 
+    let result = ``
     let is = false
+
     if (type !== `String`) value = value.toString()
     if (value.length) {
         if (value.at(0) === `-`) value = value.slice(1)
@@ -27,10 +34,9 @@ export default (optionName, optionValue, optionValueType, path, type, value, inA
         }
     }
 
-    let result = ``
     if (is !== optionValue) {
         result = `${inArray ? `Array element in field` : `Field`} '${path}' must be${!optionValue ? ` not` : ``} integer.`
     }
 
-    return result
+    return end({ given: is, message: result })
 }

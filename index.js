@@ -41,7 +41,7 @@ class Datamatch {
             }
         } else {
             this.currentPath = pathParts.slice(0, -1).join(`.`)
-            if (this.currentPath.includes(`.`)) this.sysAddRule(`Object`)
+            // if (this.currentPath.includes(`.`)) this.sysAddRule(`Object`)
         }
         return this
     }
@@ -51,7 +51,7 @@ class Datamatch {
     
         const objType = this.constructor.sysGetType(obj)
         if (objType !== `Object`) {
-            this.errors.push(`Data must be type of 'Object'. '${objType}' given.`)
+            this.errors.push({ code: `UNEXPECTED_DATA`, field: elem.path, message: `Data must be type of 'Object'. '${objType}' given.` })
             return this
         }
     
@@ -73,15 +73,24 @@ class Datamatch {
             let parentCanNotSet = this.sysIsParentCanNotSet(field.path)
 
             if (!isSet && !canBeSkipped.has(field.path) && !parentCanNotSet && this.sysIsParentObjectOnly(field.path)) {
-                let error = `Field '${field.path}' must be set. 'Undefined' given.`
-                if (!this.errors.includes(error)) this.errors.push(error)
+                let error = { code: `UNEXPECTED_FIELD`, field: field.path, message: `Field '${field.path}' must be set. 'Undefined' given.` }
+
+                let isHave = false
+                for (const err of this.errors) {
+                    if (err.message === error.message) {
+                        isHave = true
+                        break
+                    }
+                }
+
+                if (!isHave) this.errors.push(error)
             }
         }
     
         if (strict) {
             arr.forEach(elem => {
                 const fields = this.sysGetFieldsByPath(elem.path)
-                if (!fields.length) this.errors.push(`Unexpected field '${elem.path}'.`)
+                if (!fields.length) this.errors.push({ code: `UNEXPECTED_FIELD`, field: elem.path, message: `Unexpected field '${elem.path}'.` })
                 else this.sysValidate(elem, fields)
             })
         } else {
@@ -167,6 +176,7 @@ class Datamatch {
     sysValidate = (elem, fields) => {
         if (fields[0].rules[0].type === `Any`) return
         const errors = []
+        const errorMessages = []
         let validType = false
         let validOptions = false
         const availableTypes = fields.map(field => field.rules[0].type)
@@ -182,14 +192,24 @@ class Datamatch {
                     elem.value.forEach(value => {
                         const valueType = this.constructor.sysGetType(value)
                         if (validArrayTypes.length && !validArrayTypes.includes(valueType)) {
-                            const error = `Field '${elem.path}' is array, and must contain '${validArrayTypes.join(`' or '`)}' types. '${valueType}' given.`
-                            if (!errors.includes(error)) errors.push(error)
+                            const error = {
+                                code: `TYPE`, field: elem.path, name: `isArray`, value: true, given: valueType, message: `Field '${elem.path}' is array, and must contain '${validArrayTypes.join(`' or '`)}' types. '${valueType}' given.`
+                            }
+                            if (error.message && !errorMessages.includes(error.message)) {
+                                errorMessages.push(error.message)
+                                errors.push(error)
+                            }
                         } else {
                             for (const rule of rules) {
                                 if (rule.type !== valueType) continue
-                                const error = this.sysCheckOptions(rule.options, elem.path, valueType, value, true)
-                                if (error) {
-                                    if (!errors.includes(error)) errors.push(error)
+                                const optErrors = this.sysCheckOptions(rule.options, elem.path, valueType, value, true)
+                                if (optErrors.length) {
+                                    for (const error of optErrors) {
+                                        if (error.message && !errorMessages.includes(error.message)) {
+                                            errorMessages.push(error.message)
+                                            errors.push(error)
+                                        }
+                                    }
                                 } else {
                                     validOptions = true
                                 }
@@ -197,9 +217,14 @@ class Datamatch {
                         }
                     })
                 } else {
-                    const error = this.sysCheckOptions(fieldOptions, elem.path, elem.type, elem.value)
-                    if (error) {
-                        if (!errors.includes(error)) errors.push(error)
+                    const optErrors = this.sysCheckOptions(fieldOptions, elem.path, elem.type, elem.value)
+                    if (optErrors.length) {
+                        for (const error of optErrors) {
+                            if (error.message && !errorMessages.includes(error.message)) {
+                                errorMessages.push(error.message)
+                                errors.push(error)
+                            }
+                        }
                     } else {
                         validOptions = true
                     }
@@ -209,17 +234,25 @@ class Datamatch {
             }
         }
 
-        if (!validType) this.errors.push(`Field '${elem.path}' must be type of '${availableTypes.join(`' OR '`)}'. '${elem.type}' given.`)
+        if (!validType) {
+            for (const availableType of availableTypes) {
+                this.errors.push({
+                    code: `TYPE`, field: elem.path, name: `is${availableType}`, value: true, given: elem.type, message: `Field '${elem.path}' must be type of '${availableTypes.join(`' OR '`)}'. '${elem.type}' given.`
+                })
+            }
+        }
         if (!validOptions) this.errors.push(...errors)
     }
 
     sysCheckOptions = (incomeOptions, path, valueType, value, isArray = false) => {
-        let error = ``
+        const errors = []
         for (const [optionName, optionValue] of Object.entries(incomeOptions)) {
-            const checkResult = options.check(optionName, optionValue, this.constructor.sysGetType(optionValue), path, valueType, value, isArray)
-            if (checkResult.length) error += `${checkResult} (OR) `
+            const result = options.check(optionName, optionValue, this.constructor.sysGetType(optionValue), path, valueType, value, isArray)
+            if (result.message) errors.push(result)
+            // if (checkResult.length) error += `${checkResult} (OR) `
         }
-        return error.slice(0, error.length - 6)
+        // return error.slice(0, error.length - 6)
+        return errors
     }
 
     sysIsParentCanNotSet = (path) => {

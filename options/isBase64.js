@@ -1,21 +1,27 @@
 'use strict'
 
 export default (optionName, optionValue, optionValueType, path, type, value, inArray) => {
-    const availableValueTypes = [ `String` ]
-    if (!availableValueTypes.includes(type)) return `Internal field error '${path}'. Unsupported option '${optionName}'.`
-
-    const availableOptionTypes = [ `Boolean` ]
-    if (!availableOptionTypes.includes(optionValueType)) return `Internal field error '${path}'. Unsupported option type for option '${optionName}'.`
-
-    let result = ``
-    const regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/
-    const is = regex.test(value)
-
-    if (is && !optionName) {
-        result = `${inArray ? `Array element in field` : `Field`} '${path}' must be not Base64.`
-    } else if (!is && optionName) {
-        result = `${inArray ? `Array element in field` : `Field`} '${path}' must be Base64.`
+    const end = (customOptions = {}) => {
+        const options = { code: `OPTION`, field: path, name: optionName, expect: optionValue, given: null, message: null, ...customOptions }
+        return options
     }
 
-    return result
+    const availableValueTypes = [ `String` ]
+    if (!availableValueTypes.includes(type)) return end({ message: `Internal field error '${path}'. Unsupported option '${optionName}'.` })
+
+
+    const availableOptionTypes = [ `Boolean` ]
+    if (!availableOptionTypes.includes(optionValueType)) return end({ message: `Internal field error '${path}'. Unsupported option type for option '${optionName}'.` })
+
+    let result = ``
+    let is = false
+    const regex = /^(?:[A-Za-z0-9+\/]{4})*(?:[A-Za-z0-9+\/]{2}==|[A-Za-z0-9+\/]{3}=)?$/
+
+    if (regex.test(value)) is = true
+
+    if (is !== optionValue) {
+        result = `${inArray ? `Array element in field` : `Field`} '${path}' must be${!optionValue ? ` not` : ``} Base64.`
+    }
+
+    return end({ given: is, message: result })
 }

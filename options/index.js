@@ -58,7 +58,7 @@ export default class {
     static check = (optionName, optionValue, optionValueType, path, type, value, inArray = false) => {
         const validator = validators[optionName]
         if (!validator) {
-            return `Internal field error '${path}'. Unknown option '${optionName}'.`
+            return { code: `UNEXPECTED_OPTION`, field: path, name: optionName, message: `Internal field error '${path}'. Unknown option '${optionName}'.` }
         }
 
         return validator(optionName, optionValue, optionValueType, path, type, value, inArray)

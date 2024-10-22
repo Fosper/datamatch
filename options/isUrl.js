@@ -3,25 +3,28 @@
 import { URL } from 'url'
 
 export default (optionName, optionValue, optionValueType, path, type, value, inArray) => {
+    const end = (customOptions = {}) => {
+        const options = { code: `OPTION`, field: path, name: optionName, expect: optionValue, given: null, message: null, ...customOptions }
+        return options
+    }
+
     const availableValueTypes = [ `String` ]
-    if (!availableValueTypes.includes(type)) return `Internal field error '${path}'. Unsupported option '${optionName}'.`
+    if (!availableValueTypes.includes(type)) return end({ message: `Internal field error '${path}'. Unsupported option '${optionName}'.` })
 
     const availableOptionTypes = [ `Boolean` ]
-    if (!availableOptionTypes.includes(optionValueType)) return `Internal field error '${path}'. Unsupported option type for option '${optionName}'.`
+    if (!availableOptionTypes.includes(optionValueType)) return end({ message: `Internal field error '${path}'. Unsupported option type for option '${optionName}'.` })
 
     let result = ``
-    let isUrl = false
+    let is = false
+
     try {
         const parsedUrl = new URL(value)
-        if (parsedUrl.protocol.length && parsedUrl.hostname.length) isUrl = true
-        if (isUrl !== optionValue) {
-            result = `${inArray ? `Array element in field` : `Field`} '${path}' must be${!optionValue ? ` not` : ``} url.`
-        }
-        return result
-    } catch (error) {
-        if (isUrl !== optionValue) {
-            result = `${inArray ? `Array element in field` : `Field`} '${path}' must be${!optionValue ? ` not` : ``} url.`
-        }
-        return result
+        if (parsedUrl.protocol.length && parsedUrl.hostname.length) is = true
+    } catch {}
+
+    if (is !== optionValue) {
+        result = `${inArray ? `Array element in field` : `Field`} '${path}' must be${!optionValue ? ` not` : ``} url.`
     }
+
+    return end({ given: is, message: result })
 }

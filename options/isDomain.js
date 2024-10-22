@@ -1,22 +1,28 @@
 'use strict'
 
 export default (optionName, optionValue, optionValueType, path, type, value, inArray) => {
+    const end = (customOptions = {}) => {
+        const options = { code: `OPTION`, field: path, name: optionName, expect: optionValue, given: null, message: null, ...customOptions }
+        return options
+    }
+
     const availableValueTypes = [ `String` ]
-    if (!availableValueTypes.includes(type)) return `Internal field error '${path}'. Unsupported option '${optionName}'.`
+    if (!availableValueTypes.includes(type)) return end({ message: `Internal field error '${path}'. Unsupported option '${optionName}'.` })
 
     const availableOptionTypes = [ `Boolean` ]
-    if (!availableOptionTypes.includes(optionValueType)) return `Internal field error '${path}'. Unsupported option type for option '${optionName}'.`
+    if (!availableOptionTypes.includes(optionValueType)) return end({ message: `Internal field error '${path}'. Unsupported option type for option '${optionName}'.` })
 
     let result = ``
+    let is = false
+
     try {
         const url = new URL(`http://${value}`)
-        if (url.hostname !== domain || domain.split(`.`).length < 2) {
-            result = `${inArray ? `Array element in field` : `Field`} '${path}' must be${!optionValue ? ` not` : ``} domain.`
-            return result
-        }
-        return result
-    } catch (error) {
+        if (url.hostname === value && value.split(`.`).length >= 2) is = true
+    } catch {}
+
+    if (is !== optionValue) {
         result = `${inArray ? `Array element in field` : `Field`} '${path}' must be${!optionValue ? ` not` : ``} domain.`
-        return false
     }
+
+    return end({ given: is, message: result })
 }

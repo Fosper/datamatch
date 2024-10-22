@@ -1,11 +1,16 @@
 'use strict'
 
 export default (optionName, optionValue, optionValueType, path, type, value, inArray) => {
+    const end = (customOptions = {}) => {
+        const options = { code: `OPTION`, field: path, name: optionName, expect: optionValue, given: null, message: null, ...customOptions }
+        return options
+    }
+
     const availableValueTypes = [ `Number`, `BigInt`, `String`, `Array` ]
-    if (!availableValueTypes.includes(type)) return `Internal field error '${path}'. Unsupported option '${optionName}'.`
+    if (!availableValueTypes.includes(type)) return end({ message: `Internal field error '${path}'. Unsupported option '${optionName}'.` })
 
     const availableOptionTypes = [ `Number` ]
-    if (!availableOptionTypes.includes(optionValueType)) return `Internal field error '${path}'. Unsupported option type for option '${optionName}'.`
+    if (!availableOptionTypes.includes(optionValueType)) return end({ message: `Internal field error '${path}'. Unsupported option type for option '${optionName}'.` })
 
     let result = ``
     let valueLength
@@ -19,5 +24,5 @@ export default (optionName, optionValue, optionValueType, path, type, value, inA
         result = `${inArray ? `Array element in field` : `Field`} '${path}' length must be '${optionValue}'. '${valueLength.toString()}' given.`
     }
 
-    return result
+    return end({ given: value.length, message: result })
 }
