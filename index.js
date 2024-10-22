@@ -121,7 +121,7 @@ class Datamatch {
             if (secondArgType === `Object`) {
                 for (const [optionName, optionValue] of Object.entries(opt[1])) {
                     const optionValueType = this.sysGetType(optionValue)
-                    if (options.check(optionName, optionValue, optionValueType, `root`, valueType, opt[0]).length) {
+                    if (options.check(optionName, optionValue, optionValueType, `root`, valueType, opt[0]).message) {
                         return false
                     }
                 }
