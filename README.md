@@ -55,6 +55,8 @@ IMPORTANT: Data types and check options are updated every week. Contact issues t
     - [isFinalizationRegistry](#isfinalizationregistry)
     - [isAbortController](#isabortcontroller)
 - [OPTIONS](#options)
+    - [contains](#contains)
+    - [containsOnly](#containsonly)
     - [isBase64](#isbase64)
     - [isDate](#isdate-option)
     - [isDomain](#isdomain)
@@ -322,6 +324,8 @@ Available options:
 
 ## isString
 Available options:  
+[contains](#contains)  
+[containsOnly](#containsonly)  
 [isBase64](#isbase64)  
 [isDate](#isdate-option)  
 [isDomain](#isdomain)  
@@ -700,6 +704,24 @@ console.log(Datamatch.isString('{"login":"john', { isJSON: true })); // false
 ```js
 console.log(Datamatch.isString('42a718d6317dad85d3ea6ef6389d7db0', { isMd5: true })); // true
 console.log(Datamatch.isString('42a718d6317dad85d3ea6ef6389d7db', { isMd5: true })); // false
+```
+
+[back to top](#table-of-contents)
+
+## contains
+Check if string contains required chars (NOT only).
+```js
+console.log(Datamatch.isString('dad33zzz', { contains: 'abcdefABCDEF123' })); // true
+console.log(Datamatch.isString('zzz', { contains: 'abcdefABCDEF123' })); // false
+```
+
+[back to top](#table-of-contents)
+
+## containsOnly
+Check if string contains required chars (only).
+```js
+console.log(Datamatch.isString('dad33', { containsOnly: 'abcdefABCDEF123' })); // true
+console.log(Datamatch.isString('dad33z', { containsOnly: 'abcdefABCDEF123' })); // false
 ```
 
 [back to top](#table-of-contents)

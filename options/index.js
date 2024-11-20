@@ -1,5 +1,7 @@
 'use strict'
 
+import contains from './contains'
+import containsOnly from './containsOnly'
 import isBase64 from './isBase64'
 import isDate from './isDate'
 import isDomain from './isDomain'
@@ -27,6 +29,8 @@ import minLength from './minLength'
 import values from './values'
 
 const validators = {
+    contains,
+    containsOnly,
     isBase64,
     isDate,
     isDomain,
