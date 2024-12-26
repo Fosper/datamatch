@@ -18,7 +18,7 @@ export default (optionName, optionValue, optionValueType, path, type, value, inA
 
     try {
         const url = new URL(`http://${value}`)
-        if (url.hostname === value && value.split(`.`).length >= 2) is = true
+        if (url.hostname === value.toLowerCase() && value.split(`.`).length >= 2) is = true
     } catch {}
 
     if (is !== optionValue) {
